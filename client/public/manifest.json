@@ -1,6 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Perfect Profile",
+  "name": "Perfect Profile",
+  "description": "An application to allow clients to update their information that a health clinic holds about them.",
   "icons": [
     {
       "src": "favicon.ico",

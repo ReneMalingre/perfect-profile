@@ -1,0 +1,15 @@
+{
+  "extends": [
+    "react-app",
+    "plugin:prettier/recommended",
+    "plugin:react-hooks/recommended",
+    "react-app/jest"
+  ],
+  "plugins": ["react", "prettier"],
+  "rules": {
+    "semi": ["error", "never"],
+    "prettier/prettier": ["error", { "semi": false }],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/prop-types": 0
+  }
+}

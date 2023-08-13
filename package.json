@@ -8,12 +8,24 @@
     "develop": "concurrently \"cd server && npm run watch\" \"cd client && npm start\"",
     "install": "cd server && npm i && cd ../client && npm i",
     "seed": "cd server && npm run seed",
-    "build": "cd client && npm run build"
+    "build": "cd client && npm run build",
+    "lint:client": "eslint client/ --ext .js,.jsx",
+    "lint:server": "eslint server/ --ext .js",
+    "lint": "npm run lint:client && npm run lint:server",
+    "lint:client:fix": "eslint client/ --ext .js,.jsx --fix",
+    "lint:server:fix": "eslint server/ --ext .js --fix",
+    "lint:fix": "npm run lint:client:fix && npm run lint:server:fix"
   },
   "keywords": [],
   "author": "Rene Malingre",
   "license": "MIT",
   "devDependencies": {
-    "concurrently": "^5.3.0"
+    "concurrently": "^5.3.0",
+    "eslint": "^8.47.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-react": "^7.33.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^3.0.1"
   }
 }
