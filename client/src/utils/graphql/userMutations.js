@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import { USER_FRAGMENT } from 'userQueries'
+import { USER_FRAGMENT } from './userQueries'
 
 export const LOGIN_USER = gql`
   mutation login($email: String!, $password: String!) {

@@ -15,6 +15,7 @@ export const USER_FRAGMENT = gql`
         country
       }
     }
+    dateOfBirth
     role
     dataFlag
   }

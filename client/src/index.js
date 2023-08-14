@@ -12,6 +12,7 @@ import {
 import * as serviceWorker from './serviceWorker'
 import { ChakraProvider } from '@chakra-ui/react'
 import { setContext } from '@apollo/client/link/context'
+import { AppProvider } from './utils/AppContext'
 
 const httpLink = createHttpLink({
   uri: '/graphql',
@@ -37,9 +38,11 @@ const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <ChakraProvider>
-        <App />
-      </ChakraProvider>
+      <AppProvider>
+        <ChakraProvider>
+          <App />
+        </ChakraProvider>
+      </AppProvider>
     </ApolloProvider>
   </React.StrictMode>
 )

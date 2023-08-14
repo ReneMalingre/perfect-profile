@@ -1,9 +1,6 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/client'
-import { LOGIN_USER } from '../utils/graphql/userMutations'
-import Auth from '../utils/auth'
-import { useAppState } from '../utils/AppContext'
-import { SET_CURRENT_PAGE } from '../utils/actions'
+import { ADD_USER } from '../utils/graphql/userMutations'
 import {
   Box,
   Button,
@@ -11,17 +8,25 @@ import {
   FormLabel,
   Input,
   VStack,
+  Text,
 } from '@chakra-ui/react'
+import { useAppState } from '../utils/AppContext'
+import { SET_CURRENT_PAGE } from '../utils/actions'
+import Auth from '../utils/auth'
 
-const Login = (props) => {
-  const [formData, setFormData] = useState({ email: '', password: '' })
-  const [login] = useMutation(LOGIN_USER)
-  const [loginError, setLoginError] = useState('')
+const Signup = () => {
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    phone: '',
+  })
 
+  const [addUser, { error }] = useMutation(ADD_USER)
+  const [signupError, setSignupError] = useState(null)
   // Use AppContext to update currentPage
   const { state, dispatch } = useAppState()
 
-  // update state based on form input changes
   const handleInputChange = (event) => {
     const { name, value } = event.target
     setFormData((prev) => ({
@@ -30,30 +35,30 @@ const Login = (props) => {
     }))
   }
 
-  // submit form
   const handleSubmit = async (event) => {
     event.preventDefault()
-    console.log(formData)
+
     try {
-      const { data } = await login({
+      const { data } = await addUser({
         variables: { ...formData },
       })
 
-      Auth.login(data.login.token)
+      if (data) {
+        console.log('User added successfully!')
+        Auth.login(data.login.token)
 
-      // Use AppContext to update currentPage
-      dispatch({ type: SET_CURRENT_PAGE, payload: 'home' })
+        // Use AppContext to update currentPage
+        dispatch({ type: SET_CURRENT_PAGE, payload: 'home' })
+      }
     } catch (e) {
-      console.error(e)
-      setLoginError(
-        'Login failed. Please check your credentials and try again.'
-      )
+      setSignupError(e.message)
     }
 
-    // clear form values
     setFormData({
+      username: '',
       email: '',
       password: '',
+      phone: '',
     })
   }
 
@@ -61,6 +66,17 @@ const Login = (props) => {
     <Box width="400px" margin="auto" marginTop="100px">
       <form onSubmit={handleSubmit}>
         <VStack spacing={4}>
+          <FormControl id="username" isRequired>
+            <FormLabel>Username</FormLabel>
+            <Input
+              type="text"
+              name="username"
+              value={formData.username}
+              onChange={handleInputChange}
+              placeholder="Enter your username"
+            />
+          </FormControl>
+
           <FormControl id="email" isRequired>
             <FormLabel>Email address</FormLabel>
             <Input
@@ -82,9 +98,22 @@ const Login = (props) => {
               placeholder="Enter your password"
             />
           </FormControl>
-          {loginError && <p style={{ color: 'red' }}>{loginError}</p>}
+
+          <FormControl id="phone">
+            <FormLabel>Phone Number</FormLabel>
+            <Input
+              type="tel"
+              name="phone"
+              value={formData.phone}
+              onChange={handleInputChange}
+              placeholder="Enter your phone number"
+            />
+          </FormControl>
+
+          {signupError && <Text color="red.500">{signupError}</Text>}
+
           <Button mt={4} colorScheme="teal" type="submit">
-            Login
+            Sign Up
           </Button>
         </VStack>
       </form>
@@ -92,4 +121,4 @@ const Login = (props) => {
   )
 }
 
-export default Login
+export default Signup

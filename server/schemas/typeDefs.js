@@ -1,6 +1,8 @@
 const { gql } = require('apollo-server-express')
 
 const typeDefs = gql`
+  scalar Date
+
   type Address {
     street: String
     street2: String
@@ -19,6 +21,7 @@ const typeDefs = gql`
     username: String!
     password: String!
     contactDetails: ContactDetails
+    dateOfBirth: Date
     role: String!
     dataFlag: String!
   }
@@ -40,6 +43,7 @@ const typeDefs = gql`
   input UpdateUserInput {
     username: String
     contactDetails: ContactDetailsInput
+    dateOfBirth: Date
   }
 
   type Auth {
@@ -51,6 +55,7 @@ const typeDefs = gql`
     users: [User]
     getUserByEmail(email: String!): User
     getUserById(id: ID!): User
+    getCurrentUser: User
   }
 
   type Mutation {

@@ -1,8 +1,10 @@
 const { AuthenticationError } = require('apollo-server-express')
 const { User } = require('../models')
 const { signToken } = require('../utils/auth')
+const { GraphQLDate } = require('graphql-scalars')
 
 const resolvers = {
+  Date: GraphQLDate,
   Query: {
     users: async (parent, args, context) => {
       if (context.user) {
