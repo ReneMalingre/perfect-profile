@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useMutation } from '@apollo/client'
-import { LOGIN_USER } from '../utils/mutations'
+import { LOGIN_USER } from '../utils/graphql/userMutations'
 import Auth from '../utils/auth'
 import { useAppState } from '../utils/AppContext'
 import { SET_CURRENT_PAGE } from '../utils/actions'
@@ -35,7 +35,7 @@ const Login = (props) => {
       Auth.login(data.login.token)
 
       // Use AppContext to update currentPage
-      dispatch({ type: SET_CURRENT_PAGE, currentPage: 'home' })
+      dispatch({ type: SET_CURRENT_PAGE, payload: 'home' })
     } catch (e) {
       console.error(e)
     }

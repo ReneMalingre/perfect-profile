@@ -1,12 +1,87 @@
 [
   {
-    "username": "Brian Kernighan",
-    "email": "bkernighan@techfriends.dev",
-    "password": "password01"
+    "username": "john_doe",
+    "password": "password123",
+    "contactDetails": {
+      "phone": "02 1234 5678",
+      "address": {
+        "street": "123 Harbour Rd",
+        "street2": "",
+        "city": "Sydney",
+        "state": "NSW",
+        "postalCode": "2000",
+        "country": "Australia"
+      },
+      "email": "john_doe@example.com.au"
+    },
+    "role": "USER"
   },
   {
-    "username": "Donald Knuth",
-    "email": "dknuth@techfriends.dev",
-    "password": "password09"
+    "username": "jane_smith",
+    "password": "password123",
+    "contactDetails": {
+      "phone": "03 2345 6789",
+      "address": {
+        "street": "456 Collins St",
+        "street2": "",
+        "city": "Melbourne",
+        "state": "VIC",
+        "postalCode": "3000",
+        "country": "Australia"
+      },
+      "email": "jane_smith@example.com.au"
+    },
+    "role": "USER"
+  },
+  {
+    "username": "alice_wonder",
+    "password": "password123",
+    "contactDetails": {
+      "phone": "07 3456 7890",
+      "address": {
+        "street": "789 Queen St",
+        "street2": "",
+        "city": "Brisbane",
+        "state": "QLD",
+        "postalCode": "4000",
+        "country": "Australia"
+      },
+      "email": "alice_wonder@example.com.au"
+    },
+    "role": "USER"
+  },
+  {
+    "username": "bob_builder",
+    "password": "password123",
+    "contactDetails": {
+      "phone": "08 4567 8901",
+      "address": {
+        "street": "101 King William St",
+        "street2": "",
+        "city": "Adelaide",
+        "state": "SA",
+        "postalCode": "5000",
+        "country": "Australia"
+      },
+      "email": "bob_builder@example.com.au"
+    },
+    "role": "USER"
+  },
+  {
+    "username": "admin_user",
+    "password": "adminpass",
+    "contactDetails": {
+      "phone": "02 9876 5432",
+      "address": {
+        "street": "112 George St",
+        "street2": "",
+        "city": "Sydney",
+        "state": "NSW",
+        "postalCode": "2000",
+        "country": "Australia"
+      },
+      "email": "admin@example.com.au"
+    },
+    "role": "ADMIN"
   }
 ]
