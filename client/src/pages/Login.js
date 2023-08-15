@@ -35,9 +35,11 @@ const Login = (props) => {
     event.preventDefault()
     console.log(formData)
     try {
+      console.log(formData)
       const { data } = await login({
         variables: { ...formData },
       })
+      console.log(data)
 
       Auth.login(data.login.token)
 
@@ -51,10 +53,10 @@ const Login = (props) => {
     }
 
     // clear form values
-    setFormData({
-      email: '',
+    setFormData((prev) => ({
+      ...prev,
       password: '',
-    })
+    }))
   }
 
   return (

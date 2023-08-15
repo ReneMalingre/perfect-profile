@@ -1,10 +1,8 @@
 const { AuthenticationError } = require('apollo-server-express')
 const { User } = require('../models')
 const { signToken } = require('../utils/auth')
-const { GraphQLDate } = require('graphql-scalars')
 
 const resolvers = {
-  Date: GraphQLDate,
   Query: {
     users: async (parent, args, context) => {
       if (context.user) {
@@ -56,6 +54,7 @@ const resolvers = {
       return { token, user }
     },
     login: async (parent, { email, password }) => {
+      console.log('login', email, password)
       if (!email || !password) {
         throw new AuthenticationError(
           'You need to provide a valid email address and password'

@@ -42,7 +42,7 @@ const userSchema = new Schema(
     },
     contactDetails: contactDetailsSchema,
     dateOfBirth: {
-      type: Date,
+      type: String,
       required: false,
     },
     role: {

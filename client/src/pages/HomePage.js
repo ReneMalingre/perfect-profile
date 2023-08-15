@@ -10,10 +10,17 @@ const HomePage = () => {
   const { state, dispatch } = useAppState()
 
   // Get the logged-in user's information
-  const loggedInUser = Auth.getProfile()
+  const loggedInUser = Auth.loggedIn()
 
   const navigateTo = (page) => {
     dispatch({ type: SET_CURRENT_PAGE, payload: page })
+  }
+
+  const logOut = () => {
+    // run the logout method to clear the token and log us out of the db
+    Auth.logout()
+    // once logged out, set the state load the home page
+    dispatch({ type: SET_CURRENT_PAGE, payload: 'home' })
   }
 
   return (
@@ -21,7 +28,12 @@ const HomePage = () => {
       <VStack spacing={4} textAlign="center">
         {/* Display user information */}
         {loggedInUser ? (
-          <Text>Welcome, {loggedInUser.username}!</Text>
+          <>
+            <Text>Welcome, {loggedInUser.username}!</Text>
+            <Button colorScheme="teal" onClick={() => logOut()}>
+              Log Out
+            </Button>
+          </>
         ) : (
           <Text>Not logged in</Text>
         )}

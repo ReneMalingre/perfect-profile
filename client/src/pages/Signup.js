@@ -99,17 +99,6 @@ const Signup = () => {
             />
           </FormControl>
 
-          <FormControl id="phone">
-            <FormLabel>Phone Number</FormLabel>
-            <Input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleInputChange}
-              placeholder="Enter your phone number"
-            />
-          </FormControl>
-
           {signupError && <Text color="red.500">{signupError}</Text>}
 
           <Button mt={4} colorScheme="teal" type="submit">

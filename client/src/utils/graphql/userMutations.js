@@ -2,6 +2,7 @@ import { gql } from '@apollo/client'
 import { USER_FRAGMENT } from './userQueries'
 
 export const LOGIN_USER = gql`
+  ${USER_FRAGMENT}
   mutation login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
       token
@@ -19,6 +20,7 @@ export const UPDATE_USER = gql`
 `
 
 export const ADD_USER = gql`
+  ${USER_FRAGMENT}
   mutation addUser($username: String!, $email: String!, $password: String!) {
     addUser(username: $username, email: $email, password: $password) {
       token
@@ -28,6 +30,7 @@ export const ADD_USER = gql`
 `
 
 export const REMOVE_USER = gql`
+  ${USER_FRAGMENT}
   mutation removeUser($id: ID!) {
     removeUser(id: $id) {
       ...UserFields
