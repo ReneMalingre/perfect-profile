@@ -198,6 +198,52 @@
           ]
         }
       ]
+    },
+    {
+      "topic": "Reason for Choosing Us",
+      "audience": ["new"],
+      "order": 2,
+      "subTopics": [
+        {
+          "subTopicTitle": "Referral and Discovery",
+          "moreInfo": "Understanding how you found us helps us improve our services.",
+          "order": 1,
+          "questions": [
+            {
+              "label": "How did you hear about us?",
+              "type": "select",
+              "options": [
+                {
+                  "group": "Online",
+                  "items": ["Search Engine", "Social Media"]
+                },
+                {
+                  "group": "Offline",
+                  "items": ["Friend/Family", "Print Ad", "Walk-in"]
+                }
+              ],
+              "audience": ["new"],
+              "order": 1,
+              "conditional": {
+                "ifSelected": {
+                  "item": "Friend/Family",
+                  "followUp": {
+                    "label": "Can you specify the name of the friend or family member?",
+                    "type": "text",
+                    "placeholder": "e.g., John Doe",
+                    "validation": {
+                      "pattern": "^[a-zA-Z\\s]*$",
+                      "maxLength": 50
+                    },
+                    "audience": ["new"],
+                    "order": 2
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }

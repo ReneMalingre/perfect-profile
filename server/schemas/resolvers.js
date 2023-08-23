@@ -63,11 +63,11 @@ const resolvers = {
         'contactDetails.email': email,
         password,
       })
-      const token = signToken(
-        user.contactDetails.email,
-        user.username,
-        user._id
-      )
+      const token = signToken({
+        email: user.contactDetails.email,
+        username: user.username,
+        _id: user._id,
+      })
       return { token, user }
     },
     login: async (parent, { email, password }) => {
@@ -90,12 +90,17 @@ const resolvers = {
       if (!correctPw) {
         throw new AuthenticationError('Incorrect credentials')
       }
-
-      const token = signToken(
+      console.log(
+        'userData',
         userData.contactDetails.email,
         userData.username,
         userData._id
       )
+      const token = signToken({
+        email: userData.contactDetails.email,
+        username: userData.username,
+        _id: userData._id,
+      })
       // const userQuestionnaire = await Questionnaire.findOne({
       //   userId: userData._id,
       // })

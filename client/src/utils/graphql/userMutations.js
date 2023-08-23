@@ -13,11 +13,34 @@ export const LOGIN_USER = gql`
     }
   }
 `
+
 export const UPDATE_USER = gql`
-  ${USER_FRAGMENT}
-  mutation UpdateUser($id: ID!, $input: UpdateUserInput!) {
+  mutation UpdateUser($id: ID!, $input: UserInput!) {
     updateUser(id: $id, input: $input) {
-      ...UserFields
+      username
+      nameDetails {
+        title
+        firstName
+        middleName
+        lastName
+        preferredFirstName
+      }
+      contactDetails {
+        phone
+        email
+        address {
+          street1
+          street2
+          city
+          state
+          postalCode
+          country
+        }
+      }
+      dateOfBirth
+      role
+      dataFlag
+      isNewClient
     }
   }
 `

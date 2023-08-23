@@ -18,6 +18,7 @@ import {
   Input,
   VStack,
 } from '@chakra-ui/react'
+import { omitTypename } from '../utils/utils'
 
 const Login = (props) => {
   const [formData, setFormData] = useState({ email: '', password: '' })
@@ -47,16 +48,15 @@ const Login = (props) => {
       // Check if data and token exist before proceeding
       if (data && data.login && data.login.token) {
         Auth.login(data.login.token)
-        console.log('Login Successful')
-        console.log('data.login: ', data.login)
-        console.log('!!!! data.login.user: ', data.login.user)
 
         // Use AppContext to update isAuthenticated
         dispatch({ type: LOGIN })
         // Use AppContext to update userProfile
         dispatch({ type: SET_PROFILE, payload: Auth.getProfile().data })
         // Use AppContext to update user
-        dispatch({ type: SET_USER_DATA, payload: data.login.user })
+        let user = data.login.user
+        user = JSON.parse(JSON.stringify(user, omitTypename))
+        dispatch({ type: SET_USER_DATA, payload: user })
         // use AppContext to update questionnaireData
         // dispatch({
         //   type: SET_QUESTIONNAIRE_DATA,

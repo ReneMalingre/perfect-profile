@@ -67,6 +67,7 @@ const typeDefs = gql`
 
   input AddressInput {
     street1: String
+    street2: String
     city: String
     state: String
     postalCode: String
@@ -79,18 +80,21 @@ const typeDefs = gql`
     address: AddressInput
   }
 
-  input UpdateUserInput {
-    username: String
-    nameDetails: NameDetailsInput
-    contactDetails: ContactDetailsInput
-    dateOfBirth: String
-  }
-
   input LifestyleInput {
     occupation: String
     screenHoursPerDay: Int
     outdoorActivityFrequency: String
     hobbies: [String]
+  }
+
+  input UserInput {
+    username: String
+    nameDetails: NameDetailsInput
+    contactDetails: ContactDetailsInput
+    dateOfBirth: String
+    role: String
+    dataFlag: String
+    isNewClient: Boolean
   }
 
   type Auth {
@@ -120,7 +124,7 @@ const typeDefs = gql`
       email: String!
       password: String!
     ): AddUserResponse
-    updateUser(id: ID!, input: UpdateUserInput!): User
+    updateUser(id: ID!, input: UserInput!): User
     login(email: String!, password: String!): LoginResponse
     removeUser(id: ID!): User
     createQuestionnaire(userId: ID!, lifestyle: LifestyleInput): Questionnaire!
