@@ -1,0 +1,230 @@
+{
+  "questionnaire": [
+    {
+      "topic": "Contact Details",
+      "audience": ["all"],
+      "order": 1,
+      "subTopics": [
+        {
+          "subTopicTitle": "Name",
+          "moreInfo": "Can you please check the name details we have for you.",
+          "order": 1,
+          "questions": [
+            {
+              "label": "Title",
+              "id": "nameDetails.title",
+              "type": "text",
+              "placeholder": "e.g., Mr, Mrs, Ms, Dr",
+              "validation": {
+                "pattern": "^[a-zA-Z0-9\\s,]*$",
+                "maxLength": 10
+              },
+              "audience": ["new", "returning"],
+              "order": 1,
+              "conditional": null
+            },
+            {
+              "label": "First Name",
+              "id": "nameDetails.firstName",
+              "type": "text",
+              "placeholder": "e.g. Edward",
+              "validation": {
+                "pattern": "^[a-zA-Z0-9\\s,]*$",
+                "maxLength": 30
+              },
+              "audience": ["new", "returning"],
+              "order": 1,
+              "conditional": null
+            },
+            {
+              "label": "Middle Name",
+              "id": "nameDetails.middleName",
+              "type": "text",
+              "placeholder": "",
+              "validation": {
+                "pattern": "^[a-zA-Z0-9\\s,]*$",
+                "maxLength": 30
+              },
+              "audience": ["new", "returning"],
+              "order": 1,
+              "conditional": null
+            },
+            {
+              "label": "Last Name",
+              "id": "nameDetails.lastName",
+              "type": "text",
+              "placeholder": "",
+              "validation": {
+                "pattern": "^[a-zA-Z0-9\\s,]*$",
+                "maxLength": 30
+              },
+              "audience": ["new", "returning"],
+              "order": 1,
+              "conditional": null
+            },
+            {
+              "label": "Preferred First Name",
+              "id": "nameDetails.preferredFirstName",
+              "type": "text",
+              "placeholder": "e.g. Ed",
+              "validation": {
+                "pattern": "^[a-zA-Z0-9\\s,]*$",
+                "maxLength": 30
+              },
+              "audience": ["new", "returning"],
+              "order": 1,
+              "conditional": null
+            }
+          ]
+        },
+        {
+          "subTopicTitle": "Address",
+          "moreInfo": "We need your address for mailing and verification purposes.",
+          "order": 1,
+          "questions": [
+            {
+              "label": "Street",
+              "id": "contactDetails.address.street1",
+              "type": "text",
+              "placeholder": "e.g., 123 Main St",
+              "validation": {
+                "pattern": "^[a-zA-Z0-9\\s,]*$",
+                "maxLength": 100
+              },
+              "audience": ["new", "returning"],
+              "order": 1,
+              "conditional": null
+            },
+            {
+              "label": "Street 2",
+              "id": "contactDetails.address.street2",
+              "type": "text",
+              "placeholder": "",
+              "validation": {
+                "pattern": "^[a-zA-Z0-9\\s,]*$",
+                "maxLength": 100
+              },
+              "audience": ["new", "returning"],
+              "order": 2,
+              "conditional": null
+            },
+            {
+              "label": "City",
+              "id": "contactDetails.address.city",
+              "type": "text",
+              "placeholder": "",
+              "validation": {
+                "pattern": "^[a-zA-Z0-9\\s,]*$",
+                "maxLength": 100
+              },
+              "audience": ["new", "returning"],
+              "order": 3,
+              "conditional": null
+            },
+            {
+              "label": "State",
+              "id": "contactDetails.address.state",
+              "type": "select",
+              "options": ["NSW", "VIC", "QLD", "WA", "TAS", "SA", "ACT", "NT"],
+              "audience": ["all"],
+              "order": 4,
+              "conditional": null
+            },
+            {
+              "label": "Postcode",
+              "id": "contactDetails.address.postalCode",
+              "type": "text",
+              "placeholder": "",
+              "validation": {
+                "pattern": "^[a-zA-Z0-9\\s,]*$",
+                "maxLength": 10
+              },
+              "audience": ["new", "returning"],
+              "order": 5,
+              "conditional": null
+            }
+          ]
+        },
+        {
+          "subTopicTitle": "Communication Preferences",
+          "moreInfo": "This helps us understand how best to communicate with you.",
+          "order": 2,
+          "questions": [
+            {
+              "label": "Do you want to receive our newsletter?",
+              "id": "contactDetails.newsletter",
+              "type": "checkbox",
+              "helpText": "Choose if you want to stay updated with our latest news.",
+              "audience": ["all"],
+              "order": 1,
+              "conditional": {
+                "ifChecked": {
+                  "label": "Preferred Newsletter Format",
+                  "type": "select",
+                  "options": [
+                    {
+                      "group": "Digital",
+                      "items": ["Email"]
+                    },
+                    {
+                      "group": "Physical",
+                      "items": ["Printed"]
+                    }
+                  ],
+                  "audience": ["all"],
+                  "order": 2
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "topic": "Reason for Choosing Us",
+      "audience": ["new"],
+      "order": 2,
+      "subTopics": [
+        {
+          "subTopicTitle": "Referral and Discovery",
+          "moreInfo": "Understanding how you found us helps us improve our services.",
+          "order": 1,
+          "questions": [
+            {
+              "label": "How did you hear about us?",
+              "type": "select",
+              "options": [
+                {
+                  "group": "Online",
+                  "items": ["Search Engine", "Social Media"]
+                },
+                {
+                  "group": "Offline",
+                  "items": ["Friend/Family", "Print Ad", "Walk-in"]
+                }
+              ],
+              "audience": ["new"],
+              "order": 1,
+              "conditional": {
+                "ifSelected": {
+                  "item": "Friend/Family",
+                  "followUp": {
+                    "label": "Can you specify the name of the friend or family member?",
+                    "type": "text",
+                    "placeholder": "e.g., John Doe",
+                    "validation": {
+                      "pattern": "^[a-zA-Z\\s]*$",
+                      "maxLength": 50
+                    },
+                    "audience": ["new"],
+                    "order": 2
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

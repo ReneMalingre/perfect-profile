@@ -2,6 +2,7 @@ import decode from 'jwt-decode'
 
 class AuthService {
   getProfile() {
+    // purely the token: username, and _id
     const token = this.getToken()
     if (token) return decode(token)
     else return null
@@ -36,6 +37,7 @@ class AuthService {
 
   logout() {
     localStorage.removeItem('id_token')
+    // clean up other stuff here
   }
 }
 

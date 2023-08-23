@@ -1,5 +1,32 @@
 const { Schema, model } = require('mongoose')
 const bcrypt = require('bcrypt')
+const nameDetailsSchema = new Schema({
+  title: {
+    type: String,
+    required: false,
+    trim: true,
+  },
+  firstName: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  middleName: {
+    type: String,
+    required: false,
+    trim: true,
+  },
+  lastName: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  preferredFirstName: {
+    type: String,
+    required: false,
+    trim: true,
+  },
+})
 
 const contactDetailsSchema = new Schema({
   phone: {
@@ -7,7 +34,7 @@ const contactDetailsSchema = new Schema({
     required: true,
   },
   address: {
-    street: String,
+    street1: String,
     street2: String,
     city: String,
     state: String,
@@ -40,6 +67,7 @@ const userSchema = new Schema(
       required: true,
       minlength: 5,
     },
+    nameDetails: nameDetailsSchema,
     contactDetails: contactDetailsSchema,
     dateOfBirth: {
       type: String,
@@ -54,6 +82,10 @@ const userSchema = new Schema(
       type: String,
       enum: ['STALE', 'FRESH'],
       default: 'STALE',
+    },
+    isNewClient: {
+      type: Boolean,
+      default: true,
     },
   },
   {

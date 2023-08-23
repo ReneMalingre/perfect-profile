@@ -4,11 +4,19 @@ export const USER_FRAGMENT = gql`
   fragment UserFields on User {
     id
     username
+    nameDetails {
+      title
+      firstName
+      middleName
+      lastName
+      preferredFirstName
+    }
     contactDetails {
       phone
       email
       address {
-        street
+        street1
+        street2
         city
         state
         postalCode
@@ -18,6 +26,7 @@ export const USER_FRAGMENT = gql`
     dateOfBirth
     role
     dataFlag
+    isNewClient
   }
 `
 

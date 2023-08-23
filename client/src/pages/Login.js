@@ -3,7 +3,13 @@ import { useMutation } from '@apollo/client'
 import { LOGIN_USER } from '../utils/graphql/userMutations'
 import Auth from '../utils/auth'
 import { useAppState } from '../utils/AppContext'
-import { SET_CURRENT_PAGE } from '../utils/actions'
+import {
+  SET_CURRENT_PAGE,
+  LOGIN,
+  SET_PROFILE,
+  SET_USER_DATA,
+  SET_QUESTIONNAIRE_DATA,
+} from '../utils/actions'
 import {
   Box,
   Button,
@@ -33,18 +39,35 @@ const Login = (props) => {
   // submit form
   const handleSubmit = async (event) => {
     event.preventDefault()
-    console.log(formData)
     try {
-      console.log(formData)
       const { data } = await login({
         variables: { ...formData },
       })
-      console.log(data)
+      console.log('Login Data Returned: ', data)
+      // Check if data and token exist before proceeding
+      if (data && data.login && data.login.token) {
+        Auth.login(data.login.token)
+        console.log('Login Successful')
+        console.log('data.login: ', data.login)
+        console.log('!!!! data.login.user: ', data.login.user)
 
-      Auth.login(data.login.token)
+        // Use AppContext to update isAuthenticated
+        dispatch({ type: LOGIN })
+        // Use AppContext to update userProfile
+        dispatch({ type: SET_PROFILE, payload: Auth.getProfile().data })
+        // Use AppContext to update user
+        dispatch({ type: SET_USER_DATA, payload: data.login.user })
+        // use AppContext to update questionnaireData
+        // dispatch({
+        //   type: SET_QUESTIONNAIRE_DATA,
+        //   payload: data.login.questionnaireData,
+        // })
 
-      // Use AppContext to update currentPage
-      dispatch({ type: SET_CURRENT_PAGE, payload: 'home' })
+        // Use AppContext to update currentPage
+        dispatch({ type: SET_CURRENT_PAGE, payload: 'questionnaire' })
+      } else {
+        throw new Error('Something went wrong!')
+      }
     } catch (e) {
       console.error(e)
       setLoginError(

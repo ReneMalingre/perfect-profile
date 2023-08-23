@@ -2,10 +2,16 @@
   {
     "username": "john_doe",
     "password": "password123",
+    "nameDetails": {
+      "firstName": "John",
+      "middleName": "Q",
+      "lastName": "Doe",
+      "preferredFirstName": "John"
+    },
     "contactDetails": {
       "phone": "02 1234 5678",
       "address": {
-        "street": "123 Harbour Rd",
+        "street1": "123 Harbour Rd",
         "street2": "",
         "city": "Sydney",
         "state": "NSW",
@@ -19,10 +25,16 @@
   {
     "username": "jane_smith",
     "password": "password123",
+    "nameDetails": {
+      "firstName": "Jane",
+      "middleName": "E",
+      "lastName": "Smith",
+      "preferredFirstName": "Jane"
+    },
     "contactDetails": {
       "phone": "03 2345 6789",
       "address": {
-        "street": "456 Collins St",
+        "street1": "456 Collins St",
         "street2": "",
         "city": "Melbourne",
         "state": "VIC",
@@ -36,10 +48,16 @@
   {
     "username": "alice_wonder",
     "password": "password123",
+    "nameDetails": {
+      "firstName": "Alice",
+      "middleName": "L",
+      "lastName": "Wonder",
+      "preferredFirstName": "Alice"
+    },
     "contactDetails": {
       "phone": "07 3456 7890",
       "address": {
-        "street": "789 Queen St",
+        "street1": "789 Queen St",
         "street2": "",
         "city": "Brisbane",
         "state": "QLD",
@@ -53,10 +71,16 @@
   {
     "username": "bob_builder",
     "password": "password123",
+    "nameDetails": {
+      "firstName": "Robert",
+      "middleName": "",
+      "lastName": "Builder",
+      "preferredFirstName": "Bob"
+    },
     "contactDetails": {
       "phone": "08 4567 8901",
       "address": {
-        "street": "101 King William St",
+        "street1": "101 King William St",
         "street2": "",
         "city": "Adelaide",
         "state": "SA",
@@ -70,10 +94,16 @@
   {
     "username": "admin_user",
     "password": "adminpass",
+    "nameDetails": {
+      "firstName": "Admin",
+      "middleName": "A",
+      "lastName": "User",
+      "preferredFirstName": "Admin"
+    },
     "contactDetails": {
       "phone": "02 9876 5432",
       "address": {
-        "street": "112 George St",
+        "street1": "112 George St",
         "street2": "",
         "city": "Sydney",
         "state": "NSW",
