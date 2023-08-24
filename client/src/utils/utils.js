@@ -32,13 +32,26 @@ function validateUserData(userData) {
   }
   return true
 }
+
 // strip __typename from the user data
 function omitTypename(key, value) {
   return key === '__typename' ? undefined : value
 }
+
+function formatDate(dateString) {
+  if (!dateString) return ''
+
+  const regex = /^\d{4}-\d{2}-\d{2}$/
+  if (!dateString.match(regex)) return ''
+
+  const options = { year: 'numeric', month: '2-digit', day: '2-digit' }
+  return new Date(dateString).toLocaleDateString('en-AU', options)
+}
+
 export {
   getValueFromProfile,
   validateUserData,
   setValueInProfile,
   omitTypename,
+  formatDate,
 }

@@ -6,6 +6,7 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import HomePage from './pages/HomePage'
 import DynamicForm from './pages/DynamicForm'
+import Profile from './pages/Profile'
 import questionnaireData from './assets/questionnaire/questionnaireFlow.json'
 
 import {
@@ -30,7 +31,7 @@ import Footer from './components/Footer'
 
 // uri: '/graphql',
 const httpLink = createHttpLink({
-  uri: 'http://localhost:3001/graphql',
+  uri: '/graphql', //'http://localhost:3001/graphql',
 })
 
 const authLink = setContext((_, { headers }) => {
@@ -117,6 +118,7 @@ function App() {
                         path="/questionnaire"
                         element={<DynamicForm data={questionnaireData} />}
                       />
+                      <Route path="/profile" element={<Profile />} />
                       <Route path="*">"404: Not Found"</Route>{' '}
                       {/* TODO: make a 404 page */}
                     </Routes>

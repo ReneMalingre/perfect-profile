@@ -64,7 +64,7 @@ const Login = (props) => {
         // })
 
         // Use AppContext to update currentPage
-        dispatch({ type: SET_CURRENT_PAGE, payload: 'questionnaire' })
+        dispatch({ type: SET_CURRENT_PAGE, payload: 'profile' })
       } else {
         throw new Error('Something went wrong!')
       }

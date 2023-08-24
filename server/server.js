@@ -1,4 +1,5 @@
 const express = require('express')
+const helmet = require('helmet')
 const path = require('path')
 const { ApolloServer } = require('apollo-server-express')
 const { authMiddleware } = require('./utils/auth')
@@ -10,6 +11,7 @@ const db = require('./config/connection')
 const PORT = process.env.PORT || 3001
 const app = express()
 app.use(cors())
+app.use(helmet())
 
 const server = new ApolloServer({
   typeDefs,

@@ -1,6 +1,6 @@
 import React from 'react'
 import { IconButton, Flex, Link, Text } from '@chakra-ui/react'
-import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa'
+import { FaFacebook, FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa'
 
 const Footer = () => {
   return (
@@ -21,7 +21,7 @@ const Footer = () => {
         justify="center"
         mb={2}
       >
-        <Link href="https://github.com/ReneMalingre" isExternal mx={5}>
+        <Link href="https://www.adelaideeyecare.com.au" isExternal mx={5}>
           <IconButton
             aria-label="Github Profile"
             icon={<FaGithub fontSize="32px" />}
@@ -31,24 +31,10 @@ const Footer = () => {
             _hover={{ color: 'deepCyan.500', bg: 'headerFooterText.500' }}
           />
         </Link>
-        <Link
-          href="https://www.linkedin.com/in/rene-malingre"
-          isExternal
-          mx={5}
-        >
-          <IconButton
-            aria-label="LinkedIn Profile"
-            icon={<FaLinkedin fontSize="28px" />}
-            size="md"
-            color="headerFooterText.500"
-            variant="ghost"
-            _hover={{ color: 'deepCyan.500', bg: 'headerFooterText.500' }}
-          />
-        </Link>
         <Link href="https://twitter.com/ReneMalingre" isExternal mx={5}>
           <IconButton
             aria-label="Twitter Profile"
-            icon={<FaTwitter fontSize="28px" />}
+            icon={<FaFacebook fontSize="28px" />}
             size="md"
             color="headerFooterText.500"
             variant="ghost"

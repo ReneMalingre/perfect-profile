@@ -55,7 +55,7 @@ function Header() {
       <Flex alignItems="center">
         <Logo width={logoSize} />
         <Text fontSize="2xl" color="headerFooterText.500" ml={4}>
-          René Malingré
+          Perfect Profile
         </Text>
       </Flex>
       <Spacer mb={logoMargin} />
