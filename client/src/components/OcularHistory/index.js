@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { Box, Flex, Text, chakra, Link, Icon, Center } from '@chakra-ui/react'
 import { useAppState } from '../../utils/AppContext'
+import RenderRow from '../RenderRow'
 
 function OcularHistory() {
   const { state, dispatch } = useAppState()
@@ -41,36 +42,95 @@ function OcularHistory() {
         <Text fontSize="xl" fontWeight="bold">
           Your Prescription Type:
         </Text>
-        {renderRow('Myopia (shortsightedness):', 'no', labelWidth)}
-        {renderRow('Hyperopia (longsightedness):', 'no', labelWidth)}
-        {renderRow('Astigmatism:', 'yes', labelWidth)}
-        {renderRow('Presbyopia (age-related near blur):', 'yes', labelWidth)}
-        {renderRow('Emmetropia (great eyes!):', 'no', labelWidth)}
+        <RenderRow
+          label="Myopia (shortsightedness):"
+          data={'no'}
+          width={labelWidth}
+          id="myopia"
+        />
+        <RenderRow
+          label="Hyperopia (longsightedness):"
+          data={'no'}
+          width={labelWidth}
+          id="hyperopia"
+        />
+        <RenderRow
+          label="Astigmatism:"
+          data={'yes'}
+          width={labelWidth}
+          id="astigmatism"
+        />
+        <RenderRow
+          label="Presbyopia (age-related near blur):"
+          data={'yes'}
+          width={labelWidth}
+          id="presbyopia"
+        />
+        <RenderRow
+          label="Emmetropia (great eyes!):"
+          data={'no'}
+          width={labelWidth}
+          id="emmetropia"
+        />
         <Text fontSize="xl" fontWeight="bold">
           Your Eye Conditions:
         </Text>
-        {renderRow('Glaucoma:', 'no', labelWidth)}
-        {renderRow('Cataracts:', 'no', labelWidth)}
-        {renderRow('Macular Degeneration:', 'no', labelWidth)}
-        {renderRow('Dry Eyes:', 'no', labelWidth)}
-        {renderRow('Keratoconus:', 'no', labelWidth)}
-        {renderRow('Diabetic Retinopathy:', 'no', labelWidth)}
-        {renderRow('Retinal Detachment:', 'no', labelWidth)}
-        {renderRow('Strabismus or Amblyopia:', 'no', labelWidth)}
-        {renderRow('Other Eye Conditions:', 'no', labelWidth)}
+        <RenderRow
+          label="Glaucoma:"
+          data={'no'}
+          width={labelWidth}
+          id="glaucoma"
+        />
+        <RenderRow
+          label="Cataracts:"
+          data={'no'}
+          width={labelWidth}
+          id="cataracts"
+        />
+        <RenderRow
+          label="Macular Degeneration:"
+          data={'no'}
+          width={labelWidth}
+          id="armd"
+        />
+        <RenderRow
+          label="Dry Eyes:"
+          data={'no'}
+          width={labelWidth}
+          id="dryEyes"
+        />
+        <RenderRow
+          label="Keratoconus:"
+          data={'no'}
+          width={labelWidth}
+          id="keratoconus"
+        />
+        <RenderRow
+          label="Diabetic Retinopathy:"
+          data={'no'}
+          width={labelWidth}
+          id="diabeticRetinopathy"
+        />
+        <RenderRow
+          label="Retinal Detachment:"
+          data={'no'}
+          width={labelWidth}
+          id="retinalDetachment"
+        />
+        <RenderRow
+          label="Strabismus or Amblyopia:"
+          data={'no'}
+          width={labelWidth}
+          id="strabismus"
+        />
+        <RenderRow
+          label="Other Eye Conditions:"
+          data={'no'}
+          width={labelWidth}
+          id="otherEyeConditions"
+        />
       </Flex>
     </Box>
-  )
-}
-
-function renderRow(label, data, width) {
-  return (
-    <Flex my="2px">
-      <Text as="strong" width={width}>
-        {label}
-      </Text>
-      <Text flex="1">{data}</Text>
-    </Flex>
   )
 }
 

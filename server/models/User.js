@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose')
 const bcrypt = require('bcrypt')
+
 const nameDetailsSchema = new Schema({
   title: {
     type: String,
@@ -54,6 +55,34 @@ const contactDetailsSchema = new Schema({
   },
 })
 
+const healthProfessionalSchema = new Schema({
+  gp: {
+    type: String,
+    required: false,
+    trim: true,
+  },
+  gpAddress: {
+    type: String,
+    required: false,
+    trim: true,
+  },
+  ophthalmologist: {
+    type: String,
+    required: false,
+    trim: true,
+  },
+  ophthalmologistAddress: {
+    type: String,
+    required: false,
+    trim: true,
+  },
+  otherHealthProfessionals: {
+    type: String,
+    required: false,
+    trim: true,
+  },
+})
+
 const userSchema = new Schema(
   {
     username: {
@@ -69,7 +98,12 @@ const userSchema = new Schema(
     },
     nameDetails: nameDetailsSchema,
     contactDetails: contactDetailsSchema,
+    healthProfessionals: healthProfessionalSchema,
     dateOfBirth: {
+      type: String,
+      required: false,
+    },
+    healthFund: {
       type: String,
       required: false,
     },
@@ -101,6 +135,19 @@ userSchema.pre('save', async function (next) {
   next()
 })
 
+// ensure that the password is hashed before saving the user for insertMany
+userSchema.pre('insertMany', async function (next, docs) {
+  const saltRounds = 10
+
+  for (const doc of docs) {
+    if (doc.password) {
+      doc.password = await bcrypt.hash(doc.password, saltRounds)
+    }
+  }
+
+  next()
+})
+
 userSchema.methods.isCorrectPassword = async function (password) {
   return bcrypt.compare(password, this.password)
 }
@@ -112,6 +159,10 @@ userSchema.virtual('id').get(function () {
 
 // Ensure virtual fields are serialised.
 userSchema.set('toJSON', {
+  virtuals: true,
+})
+
+userSchema.set('toObject', {
   virtuals: true,
 })
 

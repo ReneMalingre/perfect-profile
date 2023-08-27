@@ -1,117 +1,157 @@
-[
-  {
-    "username": "john_doe",
-    "password": "password123",
-    "nameDetails": {
-      "firstName": "John",
-      "middleName": "Q",
-      "lastName": "Doe",
-      "preferredFirstName": "John"
-    },
-    "contactDetails": {
-      "phone": "02 1234 5678",
-      "address": {
-        "street1": "123 Harbour Rd",
-        "street2": "",
-        "city": "Sydney",
-        "state": "NSW",
-        "postalCode": "2000",
-        "country": "Australia"
+{
+  "users": [
+    {
+      "username": "john_doe",
+      "password": "password123",
+      "nameDetails": {
+        "title": "Mr.",
+        "firstName": "John",
+        "lastName": "Doe"
       },
-      "email": "john_doe@example.com.au"
-    },
-    "role": "USER"
-  },
-  {
-    "username": "jane_smith",
-    "password": "password123",
-    "nameDetails": {
-      "firstName": "Jane",
-      "middleName": "E",
-      "lastName": "Smith",
-      "preferredFirstName": "Jane"
-    },
-    "contactDetails": {
-      "phone": "03 2345 6789",
-      "address": {
-        "street1": "456 Collins St",
-        "street2": "",
-        "city": "Melbourne",
-        "state": "VIC",
-        "postalCode": "3000",
-        "country": "Australia"
+      "contactDetails": {
+        "phone": "0412345678",
+        "address": {
+          "street1": "123 Sydney St",
+          "city": "Sydney",
+          "state": "NSW",
+          "postalCode": "2000",
+          "country": "Australia"
+        },
+        "email": "john.doe@example.com"
       },
-      "email": "jane_smith@example.com.au"
+      "dateOfBirth": "1990-05-14",
+      "healthProfessionals": {
+        "gp": "Dr Emma Watson",
+        "gpAddress": "456 Bondi Road, Sydney",
+        "ophthalmologist": "Dr Robert Downey",
+        "ophthalmologistAddress": "789 Circular Quay, Sydney"
+      }
     },
-    "role": "USER"
-  },
-  {
-    "username": "alice_wonder",
-    "password": "password123",
-    "nameDetails": {
-      "firstName": "Alice",
-      "middleName": "L",
-      "lastName": "Wonder",
-      "preferredFirstName": "Alice"
-    },
-    "contactDetails": {
-      "phone": "07 3456 7890",
-      "address": {
-        "street1": "789 Queen St",
-        "street2": "",
-        "city": "Brisbane",
-        "state": "QLD",
-        "postalCode": "4000",
-        "country": "Australia"
+    {
+      "username": "emma_jones",
+      "password": "emmaPass",
+      "nameDetails": {
+        "title": "Ms.",
+        "firstName": "Emma",
+        "lastName": "Jones"
       },
-      "email": "alice_wonder@example.com.au"
-    },
-    "role": "USER"
-  },
-  {
-    "username": "bob_builder",
-    "password": "password123",
-    "nameDetails": {
-      "firstName": "Robert",
-      "middleName": "",
-      "lastName": "Builder",
-      "preferredFirstName": "Bob"
-    },
-    "contactDetails": {
-      "phone": "08 4567 8901",
-      "address": {
-        "street1": "101 King William St",
-        "street2": "",
-        "city": "Adelaide",
-        "state": "SA",
-        "postalCode": "5000",
-        "country": "Australia"
+      "contactDetails": {
+        "phone": "0423456789",
+        "address": {
+          "street1": "234 Melbourne Ave",
+          "city": "Melbourne",
+          "state": "VIC",
+          "postalCode": "3000",
+          "country": "Australia"
+        },
+        "email": "emma.jones@example.com"
       },
-      "email": "bob_builder@example.com.au"
+      "dateOfBirth": "1985-11-20",
+      "healthProfessionals": {
+        "gp": "Dr Chris Evans",
+        "gpAddress": "1010 Victoria Street, Melbourne",
+        "ophthalmologist": "Dr Scarlett Johansson",
+        "ophthalmologistAddress": "1122 Flinders Lane, Melbourne"
+      }
     },
-    "role": "USER"
-  },
-  {
-    "username": "admin_user",
-    "password": "adminpass",
-    "nameDetails": {
-      "firstName": "Admin",
-      "middleName": "A",
-      "lastName": "User",
-      "preferredFirstName": "Admin"
-    },
-    "contactDetails": {
-      "phone": "02 9876 5432",
-      "address": {
-        "street1": "112 George St",
-        "street2": "",
-        "city": "Sydney",
-        "state": "NSW",
-        "postalCode": "2000",
-        "country": "Australia"
+    {
+      "username": "liam_smith",
+      "password": "liamPass",
+      "nameDetails": {
+        "title": "Mr.",
+        "firstName": "Liam",
+        "lastName": "Smith"
       },
-      "email": "admin@example.com.au"
+      "contactDetails": {
+        "phone": "0434567890",
+        "address": {
+          "street1": "345 Brisbane Blvd",
+          "city": "Brisbane",
+          "state": "QLD",
+          "postalCode": "4000",
+          "country": "Australia"
+        },
+        "email": "liam.smith@example.com"
+      },
+      "dateOfBirth": "1992-04-03",
+      "healthProfessionals": {
+        "gp": "Dr Mark Ruffalo",
+        "gpAddress": "1313 George Street, Brisbane",
+        "ophthalmologist": "Dr Brie Larson",
+        "ophthalmologistAddress": "1414 Adelaide Street, Brisbane"
+      }
     },
-    "role": "ADMIN"
-  }
-]
+    {
+      "username": "ava_white",
+      "password": "avaPass",
+      "nameDetails": {
+        "title": "Miss",
+        "firstName": "Ava",
+        "lastName": "White"
+      },
+      "contactDetails": {
+        "phone": "0445678901",
+        "address": {
+          "street1": "456 Adelaide Alcove",
+          "city": "Adelaide",
+          "state": "SA",
+          "postalCode": "5000",
+          "country": "Australia"
+        },
+        "email": "ava.white@example.com"
+      },
+      "dateOfBirth": "1995-08-28",
+      "healthProfessionals": {
+        "gp": "Dr Jeremy Renner",
+        "gpAddress": "1717 Rundle Mall, Adelaide",
+        "ophthalmologist": "Dr Elizabeth Olsen",
+        "ophthalmologistAddress": "1818 King William Street, Adelaide"
+      }
+    },
+    {
+      "username": "noah_brown",
+      "password": "noahPass",
+      "nameDetails": {
+        "title": "Mr.",
+        "firstName": "Noah",
+        "lastName": "Brown"
+      },
+      "contactDetails": {
+        "phone": "0456789012",
+        "address": {
+          "street1": "567 Perth Place",
+          "city": "Perth",
+          "state": "WA",
+          "postalCode": "6000",
+          "country": "Australia"
+        },
+        "email": "noah.brown@example.com"
+      },
+      "dateOfBirth": "1988-02-15",
+      "healthProfessionals": {
+        "gp": "Dr Paul Rudd",
+        "gpAddress": "2020 Hay Street, Perth",
+        "ophthalmologist": "Dr Don Cheadle",
+        "ophthalmologistAddress": "2121 St Georges Terrace, Perth"
+      }
+    }
+  ],
+  "optometrists": [
+    {
+      "title": "Dr",
+      "firstName": "Rebekah",
+      "lastName": "Hopps",
+      "qualifications": "BMedSc(VisSc), MOpt, CertOcTher",
+      "bio": "Experienced optometrist...",
+      "imageURL": "/path/to/image1.jpg"
+    },
+    {
+      "title": "Mr",
+      "firstName": "René",
+      "lastName": "Malingré",
+      "qualifications": "BAppSc(Optom)(Hon)",
+      "bio": "Specialist in pediatric optometry...",
+      "imageURL": "/path/to/image2.jpg"
+    }
+  ]
+}

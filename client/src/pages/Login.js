@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
-import { useMutation } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
+
 import { LOGIN_USER } from '../utils/graphql/userMutations'
+import { GET_NEXT_APPOINTMENT } from '../utils/graphql/appointmentQueries'
+
 import Auth from '../utils/auth'
 import { useAppState } from '../utils/AppContext'
 import {
@@ -8,7 +11,11 @@ import {
   LOGIN,
   SET_PROFILE,
   SET_USER_DATA,
-  SET_QUESTIONNAIRE_DATA,
+  SET_APPOINTMENT,
+  SET_OPTOMETRIST,
+  SET_VISIT_REASONS,
+  SET_NEW_CLIENT_QUESTIONS,
+  SET_VISUAL_NEEDS,
 } from '../utils/actions'
 import {
   Box,
@@ -23,6 +30,7 @@ import { omitTypename } from '../utils/utils'
 const Login = (props) => {
   const [formData, setFormData] = useState({ email: '', password: '' })
   const [login] = useMutation(LOGIN_USER)
+
   const [loginError, setLoginError] = useState('')
 
   // Use AppContext to update currentPage
@@ -51,17 +59,68 @@ const Login = (props) => {
 
         // Use AppContext to update isAuthenticated
         dispatch({ type: LOGIN })
+
         // Use AppContext to update userProfile
         dispatch({ type: SET_PROFILE, payload: Auth.getProfile().data })
+
         // Use AppContext to update user
         let user = data.login.user
+
         user = JSON.parse(JSON.stringify(user, omitTypename))
-        dispatch({ type: SET_USER_DATA, payload: user })
-        // use AppContext to update questionnaireData
-        // dispatch({
-        //   type: SET_QUESTIONNAIRE_DATA,
-        //   payload: data.login.questionnaireData,
-        // })
+        console.log('user from login: ', user)
+        if (user) {
+          dispatch({ type: SET_USER_DATA, payload: user })
+        }
+        // use AppContext to update appointment
+        let userAppointment = data.login.appointment
+        userAppointment = JSON.parse(
+          JSON.stringify(userAppointment, omitTypename)
+        )
+
+        dispatch({
+          type: SET_APPOINTMENT,
+          payload: userAppointment,
+        })
+
+        let userVisitReasons = data.login.visitReasons
+        userVisitReasons = JSON.parse(
+          JSON.stringify(userVisitReasons, omitTypename)
+        )
+        dispatch({
+          type: SET_VISIT_REASONS,
+          payload: userVisitReasons,
+        })
+
+        // use AppContext to update optometrist
+        let userOptometrist = data.login.optometrist
+        userOptometrist = JSON.parse(
+          JSON.stringify(userOptometrist, omitTypename)
+        )
+        dispatch({
+          type: SET_OPTOMETRIST,
+          payload: userOptometrist,
+        })
+
+        let userNewClientQuestions = data.login.newClientQuestions
+        userNewClientQuestions = JSON.parse(
+          JSON.stringify(userNewClientQuestions, omitTypename)
+        )
+        dispatch({
+          type: SET_NEW_CLIENT_QUESTIONS,
+          payload: userNewClientQuestions,
+        })
+
+        let userVisualNeeds = data.login.visualNeeds
+        if (userVisualNeeds) {
+          userVisualNeeds = JSON.parse(
+            JSON.stringify(userVisualNeeds, omitTypename)
+          )
+        }
+        console.log('userVisualNeeds', userVisualNeeds)
+        dispatch({
+          type: SET_VISUAL_NEEDS,
+          payload: userVisualNeeds,
+        })
 
         // Use AppContext to update currentPage
         dispatch({ type: SET_CURRENT_PAGE, payload: 'profile' })

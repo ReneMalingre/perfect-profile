@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export const USER_FRAGMENT = gql`
+export const USER_FIELDS = gql`
   fragment UserFields on User {
     id
     username
@@ -13,7 +13,6 @@ export const USER_FRAGMENT = gql`
     }
     contactDetails {
       phone
-      email
       address {
         street1
         street2
@@ -22,8 +21,17 @@ export const USER_FRAGMENT = gql`
         postalCode
         country
       }
+      email
+    }
+    healthProfessionals {
+      gp
+      gpAddress
+      ophthalmologist
+      ophthalmologistAddress
+      otherHealthProfessionals
     }
     dateOfBirth
+    healthFund
     role
     dataFlag
     isNewClient
@@ -31,7 +39,7 @@ export const USER_FRAGMENT = gql`
 `
 
 export const GET_USER_BY_ID = gql`
-  ${USER_FRAGMENT}
+  ${USER_FIELDS}
 
   query GetUserById($id: ID!) {
     getUserById(id: $id) {
@@ -39,9 +47,17 @@ export const GET_USER_BY_ID = gql`
     }
   }
 `
+export const GET_ALL_USERS = gql`
+  query AllUsers {
+    allUsers {
+      ...UserFields
+    }
+  }
+  ${USER_FIELDS}
+`
 
 export const GET_USER_BY_EMAIL = gql`
-  ${USER_FRAGMENT}
+  ${USER_FIELDS}
 
   query GetUserByEmail($email: String!) {
     getUserByEmail(email: $email) {

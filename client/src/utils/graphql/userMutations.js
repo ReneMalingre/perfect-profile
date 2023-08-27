@@ -1,67 +1,81 @@
 import { gql } from '@apollo/client'
-import { USER_FRAGMENT } from './userQueries'
-// import { QUESTIONNAIRE_FRAGMENT } from './questionnaireQueries'
+import { USER_FIELDS } from './userQueries'
+import { APPOINTMENT_FIELDS } from './appointmentQueries'
+import { OPTOMETRIST_FIELDS } from './optometristQueries'
+import { NEW_CLIENT_QUESTIONS_FIELDS } from './newClientQueries'
+import { VISUAL_NEEDS_FIELDS } from './visualNeedsQueries'
+// ${APPOINTMENT_FIELDS}
+// ${OPTOMETRIST_FIELDS}
+// appointment {
+//   ...AppointmentFields
+// }
 
 export const LOGIN_USER = gql`
-  ${USER_FRAGMENT}
+  ${USER_FIELDS}
+  ${APPOINTMENT_FIELDS}
+  ${OPTOMETRIST_FIELDS}
+  ${NEW_CLIENT_QUESTIONS_FIELDS}
+  ${VISUAL_NEEDS_FIELDS}
   mutation login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
       token
       user {
         ...UserFields
       }
-    }
-  }
-`
-
-export const UPDATE_USER = gql`
-  mutation UpdateUser($id: ID!, $input: UserInput!) {
-    updateUser(id: $id, input: $input) {
-      username
-      nameDetails {
-        title
-        firstName
-        middleName
-        lastName
-        preferredFirstName
+      appointment {
+        ...AppointmentFields
       }
-      contactDetails {
-        phone
-        email
-        address {
-          street1
-          street2
-          city
-          state
-          postalCode
-          country
-        }
+      visitReasons {
+        id
+        appointmentId
+        reason
       }
-      dateOfBirth
-      role
-      dataFlag
-      isNewClient
-    }
-  }
-`
-
-export const ADD_USER = gql`
-  ${USER_FRAGMENT}
-  mutation addUser($username: String!, $email: String!, $password: String!) {
-    addUser(username: $username, email: $email, password: $password) {
-      token
-      user {
-        ...UserFields
+      optometrist {
+        ...OptometristFields
+      }
+      newClientQuestions {
+        ...NewClientQuestionsFields
+      }
+      visualNeeds {
+        ...VisualNeedsFields
       }
     }
   }
 `
 
-export const REMOVE_USER = gql`
-  ${USER_FRAGMENT}
-  mutation removeUser($id: ID!) {
-    removeUser(id: $id) {
+// CREATE USER
+export const CREATE_USER = gql`
+  mutation CreateUser($input: UserInput!) {
+    createUser(input: $input) {
       ...UserFields
+    }
+  }
+  ${USER_FIELDS}
+`
+
+// DELETE USER
+export const DELETE_USER = gql`
+  mutation DeleteUser($id: ID!) {
+    deleteUser(id: $id) {
+      success
+      message
+    }
+  }
+`
+// UPDATE USER
+export const UPDATE_USER = gql`
+  ${USER_FIELDS}
+  mutation UpdateUser($input: UserInput!) {
+    updateUser(input: $input) {
+      ...UserFields
+    }
+  }
+`
+export const UPDATE_USERNAME = gql`
+  mutation UpdateUsername($input: UsernameInput!) {
+    updateUsername(input: $input) {
+      id
+      username
     }
   }
 `

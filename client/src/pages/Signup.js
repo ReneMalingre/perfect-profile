@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/client'
-import { ADD_USER } from '../utils/graphql/userMutations'
+import { CREATE_USER } from '../utils/graphql/userMutations'
 import {
   Box,
   Button,
@@ -22,7 +22,7 @@ const Signup = () => {
     phone: '',
   })
 
-  const [addUser, { error }] = useMutation(ADD_USER)
+  const [addUser, { error }] = useMutation(CREATE_USER)
   const [signupError, setSignupError] = useState(null)
   // Use AppContext to update currentPage
   const { state, dispatch } = useAppState()

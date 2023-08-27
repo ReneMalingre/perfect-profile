@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { Box, Flex, Text, chakra, Link, Icon, Center } from '@chakra-ui/react'
 import { useAppState } from '../../utils/AppContext'
+import RenderRow from '../RenderRow'
 
 function MedicalHistory() {
   const { state, dispatch } = useAppState()
@@ -42,37 +43,101 @@ function MedicalHistory() {
         <Text fontSize="xl" fontWeight="bold">
           Your Health Conditions:
         </Text>
-        {renderRow('Diabetes:', 'no', labelWidth)}
-        {renderRow('High blood pressure:', 'no', labelWidth)}
-        {renderRow('Autoimmune disease', 'yes', labelWidth)}
-        {renderRow('Thyroid disease', 'yes', labelWidth)}
-        {renderRow('Smoker:', 'yes', labelWidth)}
-        {renderRow('Other significant:', 'no', labelWidth)}
+        <RenderRow
+          label="Diabetes:"
+          data={'no'}
+          width={labelWidth}
+          id="diabetes"
+        />
+        <RenderRow
+          label="High blood pressure:"
+          data={'no'}
+          width={labelWidth}
+          id="highBloodPressure"
+        />
+        <RenderRow
+          label="Autoimmune disease"
+          data={'yes'}
+          width={labelWidth}
+          id="autoimmuneDisease"
+        />
+        <RenderRow
+          label="Thyroid disease"
+          data={'yes'}
+          width={labelWidth}
+          id="thyroidDisease"
+        />
+        <RenderRow
+          label="Smoker:"
+          data={'yes'}
+          width={labelWidth}
+          id="smoker"
+        />
+        <RenderRow
+          label="Other significant:"
+          data={'no'}
+          width={labelWidth}
+          id="otherSignificant"
+        />
         <Text fontSize="xl" fontWeight="bold">
           Your Family's Eye and Health Conditions:
         </Text>
-        {renderRow('Diabetes:', 'no', labelWidth)}
-        {renderRow('Autoimmune disease', 'yes', labelWidth)}
-        {renderRow('Glaucoma:', 'no', labelWidth)}
-        {renderRow('Cataracts:', 'no', labelWidth)}
-        {renderRow('Macular Degeneration:', 'no', labelWidth)}
-        {renderRow('Keratoconus:', 'no', labelWidth)}
-        {renderRow('Retinal Detachment:', 'no', labelWidth)}
-        {renderRow('Strabismus or Amblyopia:', 'no', labelWidth)}
-        {renderRow('Other inheritable conditions:', 'no', labelWidth)}
+        <RenderRow
+          label="Diabetes:"
+          data={'no'}
+          width={labelWidth}
+          id="familyDiabetes"
+        />
+        <RenderRow
+          label="Autoimmune disease"
+          data={'yes'}
+          width={labelWidth}
+          id="familyAutoImmuneDisease"
+        />
+        <RenderRow
+          label="Glaucoma:"
+          data={'no'}
+          width={labelWidth}
+          id="familyGlaucoma"
+        />
+        <RenderRow
+          label="Cataracts:"
+          data={'no'}
+          width={labelWidth}
+          id="familyCataracts"
+        />
+        <RenderRow
+          label="Macular Degeneration:"
+          data={'no'}
+          width={labelWidth}
+          id="familyARMD"
+        />
+        <RenderRow
+          label="Keratoconus:"
+          data={'no'}
+          width={labelWidth}
+          id="familyKeratoconus"
+        />
+        <RenderRow
+          label="Retinal Detachment:"
+          data={'no'}
+          width={labelWidth}
+          id="familyRetinalDetachment"
+        />
+        <RenderRow
+          label="Strabismus or Amblyopia:"
+          data={'no'}
+          width={labelWidth}
+          id="familyStrabismus"
+        />
+        <RenderRow
+          label="Other inheritable conditions:"
+          data={'no'}
+          width={labelWidth}
+          id="familyOtherInheritableConditions"
+        />
       </Flex>
     </Box>
-  )
-}
-
-function renderRow(label, data, width) {
-  return (
-    <Flex my="2px">
-      <Text as="strong" width={width}>
-        {label}
-      </Text>
-      <Text flex="1">{data}</Text>
-    </Flex>
   )
 }
 

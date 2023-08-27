@@ -4,5 +4,9 @@ export const initialState = {
   isAuthenticated: false,
   userProfile: null,
   userData: null,
-  questionnaireData: null,
+  appointment: null,
+  optometrist: null,
+  visitReasons: [],
+  newClientQuestions: null,
+  visualNeeds: null,
 }

@@ -12,7 +12,7 @@ import {
   Flex,
 } from '@chakra-ui/react'
 
-function StaffBioPopup({ imageUrl, name, bio }) {
+function StaffBioPopup({ imageUrl, name, qualifications, bio }) {
   const { isOpen, onOpen, onClose } = useDisclosure() // custom hook for handling modal state
 
   return (
@@ -39,6 +39,7 @@ function StaffBioPopup({ imageUrl, name, bio }) {
       <Text cursor="pointer" onClick={onOpen}>
         {name}
       </Text>
+      <Text fontSize="xs">{qualifications}</Text>
       {/* Modal for Staff Bio */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

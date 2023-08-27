@@ -3,12 +3,10 @@ import { useAppState } from '../../utils/AppContext'
 import { SET_CURRENT_PAGE, LOGOUT } from '../../utils/actions'
 import { Box, Grid, Flex, Button, VStack, Text, Image } from '@chakra-ui/react'
 import StaffBioPopup from '../../components/StaffBioPopup'
-import Auth from '../../utils/auth'
-import staffBios from '../../assets/staffBios/staffBios'
 import AppointmentCard from '../../components/AppointmentCard'
 import VisitReasons from '../../components/VisitReasons'
 import CurrentContactDetails from '../../components/CurrentContactDetails'
-import NewClientQuestions from '../../components/NewClientQuestions'
+import NewClientQueries from '../../components/NewClientQuestions'
 import OcularHistory from '../../components/OcularHistory'
 import MedicalHistory from '../../components/MedicalHistory'
 import VisualNeeds from '../../components/VisualNeeds'
@@ -16,7 +14,16 @@ import VisualNeeds from '../../components/VisualNeeds'
 const Profile = () => {
   const { state, dispatch } = useAppState()
   const userData = state.userData
-  const optometrist = staffBios[0]
+  const optometrist = state.optometrist
+  let optomName = ''
+  if (optometrist) {
+    optomName = `${optometrist.title} ${optometrist.firstName} ${optometrist.lastName}`
+  }
+  const appointmentId = state.appointment.id
+  const newClientQuestions = state.newClientQuestions
+
+  console.log('appointmentId', appointmentId)
+
   return (
     <Grid templateColumns={{ base: '1fr', lg: 'repeat(2, 1fr)' }} gap={6} p={4}>
       <Box border="2px" borderRadius="md" boxShadow="2xl" p={4}>
@@ -28,17 +35,17 @@ const Profile = () => {
             mr={{ base: 0, md: 4 }}
             align="stretch"
           >
-            <AppointmentCard
-              date="25 August 2023"
-              time="10 am"
-              location="Westbourne Park"
-              address="415 Goodwood Rd, Westbourne Park, SA 5041, Australia"
-            />
-            <StaffBioPopup
-              imageUrl={optometrist.imageUrl}
-              name={optometrist.name}
-              bio={optometrist.bio}
-            />
+            <AppointmentCard />
+            {optometrist ? (
+              <StaffBioPopup
+                imageUrl={optometrist.imageUrl}
+                name={optomName}
+                qualifications={optometrist.qualifications}
+                bio={optometrist.bio}
+              />
+            ) : (
+              ''
+            )}
           </VStack>
 
           {/* Right Sub-element */}
@@ -68,25 +75,25 @@ const Profile = () => {
       <Box border="2px" borderRadius="md" boxShadow="2xl" p={4}>
         <CurrentContactDetails />
       </Box>
-      {userData.isNewClient ? (
+      {userData.isNewClient && newClientQuestions ? (
         <Box border="2px" borderRadius="md" boxShadow="2xl" p={4}>
-          <NewClientQuestions />
+          <NewClientQueries />
         </Box>
       ) : (
         ''
       )}
       <Box border="2px" borderRadius="md" boxShadow="2xl" p={4}>
-        <VisitReasons />
+        <VisitReasons appointmentId={appointmentId} />
       </Box>
       <Box border="2px" borderRadius="md" boxShadow="2xl" p={4}>
         <VisualNeeds />
       </Box>
-      <Box border="2px" borderRadius="md" boxShadow="2xl" p={4}>
+      {/* <Box border="2px" borderRadius="md" boxShadow="2xl" p={4}>
         <OcularHistory />
       </Box>
       <Box border="2px" borderRadius="md" boxShadow="2xl" p={4}>
         <MedicalHistory />
-      </Box>
+      </Box> */}
     </Grid>
   )
 }

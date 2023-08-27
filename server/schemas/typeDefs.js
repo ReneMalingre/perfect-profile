@@ -24,16 +24,28 @@ const typeDefs = gql`
     email: String
   }
 
+  type HealthProfessional {
+    gp: String
+    gpAddress: String
+    ophthalmologist: String
+    ophthalmologistAddress: String
+    otherHealthProfessionals: String
+  }
+
   type User {
     id: ID!
-    username: String
-    password: String
+    username: String!
+    password: String!
     nameDetails: NameDetails
     contactDetails: ContactDetails
+    healthProfessionals: HealthProfessional
     dateOfBirth: String
+    healthFund: String
     role: String
     dataFlag: String
     isNewClient: Boolean
+    createdAt: String
+    updatedAt: String
   }
 
   type Lifestyle {
@@ -43,20 +55,22 @@ const typeDefs = gql`
     hobbies: [String]
   }
 
+  type Appointment {
+    id: ID!
+    userId: ID!
+    appointmentDate: String!
+    appointmentTime: String!
+    location: String!
+    locationAddress: String!
+    optometristId: ID!
+  }
+
   type VisitReason {
+    id: ID!
+    appointmentId: ID!
     reason: String!
   }
 
-  type Symptoms {
-    symptom: String!
-  }
-
-  type Questionnaire {
-    userId: User!
-    lifestyle: Lifestyle!
-    reasonsForVisit: [String]
-    symptoms: [String]
-  }
   input NameDetailsInput {
     title: String
     firstName: String
@@ -80,6 +94,14 @@ const typeDefs = gql`
     address: AddressInput
   }
 
+  input HealthProfessionalInput {
+    gp: String
+    gpAddress: String
+    ophthalmologist: String
+    ophthalmologistAddress: String
+    otherHealthProfessionals: String
+  }
+
   input LifestyleInput {
     occupation: String
     screenHoursPerDay: Int
@@ -88,26 +110,43 @@ const typeDefs = gql`
   }
 
   input UserInput {
+    id: ID!
     username: String
     nameDetails: NameDetailsInput
     contactDetails: ContactDetailsInput
+    healthProfessionals: HealthProfessionalInput
     dateOfBirth: String
+    healthFund: String
     role: String
     dataFlag: String
     isNewClient: Boolean
+  }
+
+  input UsernameInput {
+    id: ID!
+    username: String!
+  }
+
+  input AppointmentInput {
+    id: ID!
+    userId: ID!
+    appointmentDate: String!
+    appointmentTime: String!
+    location: String
+    locationAddress: String
+    optometristId: ID!
+  }
+
+  input VisitReasonInput {
+    id: ID
+    reason: String!
+    appointmentId: ID
   }
 
   type Auth {
     token: ID!
   }
 
-  type Query {
-    users: [User]
-    getUserByEmail(email: String!): User
-    getUserById(id: ID!): User
-    getCurrentUser: User
-    getQuestionnaire(userId: ID!): Questionnaire
-  }
   type AddUserResponse {
     token: ID!
     user: User
@@ -116,6 +155,124 @@ const typeDefs = gql`
   type LoginResponse {
     token: ID!
     user: User
+    appointment: Appointment
+    visitReasons: [VisitReason]
+    optometrist: Optometrist
+    newClientQuestions: NewClientQuestions
+    visualNeeds: VisualNeeds
+  }
+
+  type MessageResponse {
+    success: Boolean!
+    message: String!
+  }
+
+  type Optometrist {
+    id: ID!
+    title: String
+    firstName: String!
+    lastName: String!
+    qualifications: String
+    bio: String
+    imageURL: String
+  }
+
+  input OptometristInput {
+    title: String
+    firstName: String!
+    lastName: String!
+    qualifications: String
+    bio: String
+    imageURL: String
+  }
+
+  type NewClientQuestions {
+    id: ID!
+    userId: ID!
+    reasonForChoosing: String!
+    otherReasonForChoosing: String!
+    whoToThank: String!
+    firstEyeExam: Boolean!
+    timeSinceLastExam: String!
+    spectacleWearer: Boolean!
+    contactLensWearer: Boolean!
+    spectacleTypes: String!
+    contactLensTypes: String!
+    contactLensSchedule: String!
+    spectacleDesire: String!
+    contactLensDesire: String!
+    generalInfo: String!
+  }
+
+  input NewClientQuestionsInput {
+    id: ID!
+    userId: ID!
+    reasonForChoosing: String
+    otherReasonForChoosing: String
+    whoToThank: String
+    firstEyeExam: Boolean
+    timeSinceLastExam: String
+    spectacleWearer: Boolean
+    contactLensWearer: Boolean
+    spectacleTypes: String
+    contactLensTypes: String
+    contactLensSchedule: String
+    spectacleDesire: String
+    contactLensDesire: String
+    generalInfo: String
+  }
+
+  type VisualNeeds {
+    id: ID!
+    userId: ID!
+    occupation: String
+    workEnvironment: String
+    workScreenTime: String
+    workExtendedNear: String
+    workExtendedDistance: String
+    workEyeSafety: String
+    workOtherNeeds: String
+    lifeScreenTime: String
+    lifeReadingTime: String
+    lifeOtherNear: String
+    lifeDrivingTime: String
+    lifeExerciseTime: String
+    lifeExerciseTypes: String
+    lifeOtherDistance: String
+    generalInfo: String
+  }
+
+  input UpsertVisualNeedsInput {
+    id: ID!
+    userId: ID!
+    occupation: String
+    workEnvironment: String
+    workScreenTime: String
+    workExtendedNear: String
+    workExtendedDistance: String
+    workEyeSafety: String
+    workOtherNeeds: String
+    lifeScreenTime: String
+    lifeReadingTime: String
+    lifeOtherNear: String
+    lifeDrivingTime: String
+    lifeExerciseTime: String
+    lifeExerciseTypes: String
+    lifeOtherDistance: String
+    generalInfo: String
+  }
+  type Query {
+    allUsers: [User!]!
+    getUserByEmail(email: String!): User
+    getUserById(id: ID!): User
+    getCurrentUser: User
+    visitReasonsByAppointment(appointmentId: ID!): [VisitReason]!
+    appointmentsByUser(userId: ID!): [Appointment]!
+    nextAppointment(userId: ID!): Appointment
+    getOptometrists: [Optometrist]
+    getOptometrist(id: ID!): Optometrist
+    getNewClientQuestionsByUserId(userId: ID!): NewClientQuestions
+    getVisualNeedsByUserId(userId: ID!): VisualNeeds
   }
 
   type Mutation {
@@ -124,11 +281,44 @@ const typeDefs = gql`
       email: String!
       password: String!
     ): AddUserResponse
-    updateUser(id: ID!, input: UserInput!): User
+    createUser(user: UserInput!): User!
+    updateUser(input: UserInput!): User!
+    deleteUser(id: ID!): MessageResponse!
     login(email: String!, password: String!): LoginResponse
-    removeUser(id: ID!): User
-    createQuestionnaire(userId: ID!, lifestyle: LifestyleInput): Questionnaire!
-    updateQuestionnaire(id: ID!, lifestyle: LifestyleInput): Questionnaire!
+    updateUsername(input: UsernameInput!): User!
+
+    addVisitReason(appointmentId: ID!, reason: String!): VisitReason!
+    updateVisitReason(input: VisitReasonInput!): VisitReason!
+    deleteVisitReason(id: ID!): MessageResponse!
+    updateVisitReasons(
+      appointmentId: ID!
+      visitReasons: [VisitReasonInput]!
+      deletedReasonIds: [ID]
+    ): [VisitReason]
+
+    addAppointment(
+      userId: ID!
+      appointmentDate: String!
+      appointmentTime: String!
+      location: String!
+      locationAddress: String!
+      optometristId: ID!
+    ): Appointment!
+    updateAppointment(input: AppointmentInput!): Appointment!
+    deleteAppointment(id: ID!): MessageResponse!
+
+    addOptometrist(input: OptometristInput!): Optometrist
+    updateOptometrist(id: ID!, input: OptometristInput!): Optometrist
+    deleteOptometrist(id: ID!): MessageResponse!
+
+    addNewClientQuestions(input: NewClientQuestionsInput!): NewClientQuestions!
+    updateNewClientQuestionsByUserId(
+      userId: ID!
+      input: NewClientQuestionsInput!
+    ): NewClientQuestions!
+    deleteNewClientQuestionsByUserId(userId: ID!): MessageResponse!
+
+    upsertVisualNeeds(userId: ID!, input: UpsertVisualNeedsInput!): VisualNeeds!
   }
 `
 
