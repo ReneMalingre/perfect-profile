@@ -5,9 +5,8 @@ import RouteWrangler from './components/RouteWrangler' // import the RouteWrangl
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import HomePage from './pages/HomePage'
-import DynamicForm from './pages/DynamicForm'
 import Profile from './pages/Profile'
-import questionnaireData from './assets/questionnaire/questionnaireFlow.json'
+import FourOhFour from './pages/FourOhFour'
 
 import {
   ApolloClient,
@@ -36,7 +35,6 @@ const httpLink = createHttpLink({
 
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('id_token')
-  console.log(token)
   return {
     headers: {
       ...headers,
@@ -57,8 +55,8 @@ const theme = extendTheme({
   styles: {
     global: {
       'html, body': {
-        backgroundColor: 'oxfordBlue.900',
-        color: 'periwinkle.500',
+        backgroundColor: 'pageMargins.500',
+        color: 'panelText.500',
       },
     },
   },
@@ -67,28 +65,32 @@ const theme = extendTheme({
     body: 'Atkinson Hyperlegible, sans-serif',
   },
   colors: {
-    // original
-    // oxfordBlue: { 500: '#0A192F', 900: '#02070D' },
-    // coolGray: { 500: '#8892B0' },
-    // periwinkle: { 500: '#CCD6F6' },
-    // turquoise: { 500: '#50D0B8', 600: '#42b6a1' },
-    // classic and neutral
-    // deepBlue: { 500: '#1E2A38', 900: '#0D131A' },
-    // slateGray: { 500: '#708297' },
-    // softGray: { 500: '#D0D5E2' },
-    // navyBlue: { 500: '#2F4D75', 600: '#253a5b' },
-    // headerFooterText: { 500: '#ECEFF4' },
-    // earthy and trustworthy
-    // charcoal: { 500: '#2E3338', 900: '#1A1C1D' },
-    // oliveGray: { 500: '#7F8C8D' },
-    // clay: { 500: '#BDC3C7' },
-    // forestGreen: { 500: '#407D63', 600: '#33624f' },
-    // modern and minimalist
-    spaceGray: { 500: '#2D313D', 900: '#181A20' },
-    mutedCyan: { 500: '#7FA8A5' },
-    lightGray: { 500: '#EBEBEB' },
-    deepCyan: { 500: '#2A6866', 600: '#204d4c' },
-    headerFooterText: { 500: '#F5F7FA' }, // Added for contrast against deepCyan
+    // Header and Footer
+    headerFooterText: { 500: '#FFFFFF' },
+    headerFooterSelectedText: { 500: '#1A365D' }, // Dark blue for selected text
+    headerFooterBg: { 500: '#23395D' }, // Dark navy blue background
+
+    // Page Background
+    pageBg: { 500: '#F4F5F7' }, // A soft grayish background
+    pageMargins: { 500: '#E5E7EB' }, // A slightly darker gray for page margins
+
+    // Panels
+    panelBg: { 500: '#FFFFFF' }, // Pure white for panels for contrast and readability
+    panelText: { 500: '#333333' }, // Near-black for regular text
+    panelHeading: { 500: '#23395D' }, // Using the same dark navy blue for headings for consistency
+    contrastText: { 500: '#E07A5F' }, // Pure white for contrast text
+    panelLightText: {
+      50: '#EBEDF5',
+      100: '#CED3E1',
+      200: '#B0B9CC',
+      300: '#919FB7',
+      400: '#7285A2',
+      500: '#556C9D', // A medium-light navy blue, brighter than the regular text but not as bright as the background.
+      600: '#435883',
+      700: '#324468',
+      800: '#21304E',
+      900: '#101C33',
+    },
   },
 })
 
@@ -98,7 +100,7 @@ function App() {
       <CSSReset />
       <ApolloProvider client={client}>
         <AppProvider>
-          <Container maxW="1280px" boxShadow="lg" bg="oxfordBlue.500" p={0}>
+          <Container maxW="1280px" boxShadow="lg" bg="pageBg.500" p={0}>
             <Router>
               <RouteWrangler>
                 <Box
@@ -114,13 +116,8 @@ function App() {
                       <Route path="/" element={<HomePage />} />
                       <Route path="/login" element={<Login />} />
                       <Route path="/signup" element={<Signup />} />
-                      <Route
-                        path="/questionnaire"
-                        element={<DynamicForm data={questionnaireData} />}
-                      />
                       <Route path="/profile" element={<Profile />} />
-                      <Route path="*">"404: Not Found"</Route>{' '}
-                      {/* TODO: make a 404 page */}
+                      <Route path="*" element={<FourOhFour />} />
                     </Routes>
                   </main>
                   <Footer />

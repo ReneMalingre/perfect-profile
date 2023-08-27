@@ -4,11 +4,7 @@ import { APPOINTMENT_FIELDS } from './appointmentQueries'
 import { OPTOMETRIST_FIELDS } from './optometristQueries'
 import { NEW_CLIENT_QUESTIONS_FIELDS } from './newClientQueries'
 import { VISUAL_NEEDS_FIELDS } from './visualNeedsQueries'
-// ${APPOINTMENT_FIELDS}
-// ${OPTOMETRIST_FIELDS}
-// appointment {
-//   ...AppointmentFields
-// }
+import { PAST_OCULAR_HISTORY_FIELDS } from './pastOcularHistoryQueries'
 
 export const LOGIN_USER = gql`
   ${USER_FIELDS}
@@ -16,6 +12,7 @@ export const LOGIN_USER = gql`
   ${OPTOMETRIST_FIELDS}
   ${NEW_CLIENT_QUESTIONS_FIELDS}
   ${VISUAL_NEEDS_FIELDS}
+  ${PAST_OCULAR_HISTORY_FIELDS}
   mutation login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
       token
@@ -38,6 +35,9 @@ export const LOGIN_USER = gql`
       }
       visualNeeds {
         ...VisualNeedsFields
+      }
+      pastOcularHistory {
+        ...PastOcularHistoryFields
       }
     }
   }

@@ -48,6 +48,21 @@ const typeDefs = gql`
     updatedAt: String
   }
 
+  type UserNoPassword {
+    id: ID!
+    username: String!
+    nameDetails: NameDetails
+    contactDetails: ContactDetails
+    healthProfessionals: HealthProfessional
+    dateOfBirth: String
+    healthFund: String
+    role: String
+    dataFlag: String
+    isNewClient: Boolean
+    createdAt: String
+    updatedAt: String
+  }
+
   type Lifestyle {
     occupation: String
     screenHoursPerDay: Int
@@ -154,12 +169,13 @@ const typeDefs = gql`
 
   type LoginResponse {
     token: ID!
-    user: User
+    user: UserNoPassword
     appointment: Appointment
     visitReasons: [VisitReason]
     optometrist: Optometrist
     newClientQuestions: NewClientQuestions
     visualNeeds: VisualNeeds
+    pastOcularHistory: PastOcularHistory
   }
 
   type MessageResponse {
@@ -261,6 +277,45 @@ const typeDefs = gql`
     lifeOtherDistance: String
     generalInfo: String
   }
+
+  type PastOcularHistory {
+    id: ID!
+    userId: ID!
+    myopia: String
+    hyperopia: String
+    astigmatism: String
+    presbyopia: String
+    emmetropia: String
+    glaucoma: String
+    cataracts: String
+    macularDegeneration: String
+    dryEyes: String
+    keratoconus: String
+    diabeticRetinopathy: String
+    retinalDetachment: String
+    strabismus: String
+    generalInfo: String
+  }
+
+  input UpsertPastOcularHistory {
+    id: ID!
+    userId: ID!
+    myopia: String
+    hyperopia: String
+    astigmatism: String
+    presbyopia: String
+    emmetropia: String
+    glaucoma: String
+    cataracts: String
+    macularDegeneration: String
+    dryEyes: String
+    keratoconus: String
+    diabeticRetinopathy: String
+    retinalDetachment: String
+    strabismus: String
+    generalInfo: String
+  }
+
   type Query {
     allUsers: [User!]!
     getUserByEmail(email: String!): User
@@ -273,6 +328,8 @@ const typeDefs = gql`
     getOptometrist(id: ID!): Optometrist
     getNewClientQuestionsByUserId(userId: ID!): NewClientQuestions
     getVisualNeedsByUserId(userId: ID!): VisualNeeds
+    getPastOcularHistoryByUserId(userId: ID!): PastOcularHistory
+    getLoginInfo: LoginResponse
   }
 
   type Mutation {
@@ -282,9 +339,10 @@ const typeDefs = gql`
       password: String!
     ): AddUserResponse
     createUser(user: UserInput!): User!
-    updateUser(input: UserInput!): User!
+    updateUser(input: UserInput!): UserNoPassword!
     deleteUser(id: ID!): MessageResponse!
     login(email: String!, password: String!): LoginResponse
+
     updateUsername(input: UsernameInput!): User!
 
     addVisitReason(appointmentId: ID!, reason: String!): VisitReason!
@@ -319,6 +377,10 @@ const typeDefs = gql`
     deleteNewClientQuestionsByUserId(userId: ID!): MessageResponse!
 
     upsertVisualNeeds(userId: ID!, input: UpsertVisualNeedsInput!): VisualNeeds!
+    upsertPastOcularHistory(
+      userId: ID!
+      input: UpsertPastOcularHistory!
+    ): PastOcularHistory!
   }
 `
 

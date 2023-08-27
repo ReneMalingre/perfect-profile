@@ -51,9 +51,23 @@ function AddressEntry({
   const cancelButtonStyle = {
     fontWeight: 'normal',
     color: 'blue.50',
-    bgColor: 'blue.500',
+    bgColor: 'headerFooterBg.500',
     size: 'sm',
     _hover: { bgColor: 'blue.800' },
+  }
+
+  const inputStyle = {
+    height: '1.8rem',
+    backgroundColor: !isValid ? 'red.100' : 'green.50',
+    border: !isValid ? '1px solid red' : '1px solid green',
+    focusBorderColor: !isValid ? 'red.200' : 'green.200',
+    sx: {
+      '::placeholder': {
+        color: 'gray.500',
+        fontSize: 'xs',
+      },
+    },
+    mb: 1,
   }
 
   // user clicks the text to start editing
@@ -64,8 +78,6 @@ function AddressEntry({
 
   // user changes the input value so update local state
   const handleInputChange = (event, identifier) => {
-    console.log('RenderRow: handleInputChange', event.target.value)
-
     const value = event.target.value
     // copy the local data object
     const obj = { ...localData }
@@ -78,7 +90,6 @@ function AddressEntry({
     }
 
     current[keys[keys.length - 1]] = value
-    console.log('RenderRow: handleInputChange', current)
     // set the single field value
     setLocalData(current)
   }
@@ -87,7 +98,6 @@ function AddressEntry({
   const handleSave = () => {
     // Check if data has changed
     if (!deepEqual(localData, initialData)) {
-      console.log('RenderRow: data changed', localData)
       onDataChange(localData) // notify the parent of the change only if data changed
     }
     // reset the UI
@@ -101,7 +111,7 @@ function AddressEntry({
 
   return (
     <Flex my={1}>
-      <Text as="strong" style={labelStyle} width={width}>
+      <Text as="strong" {...labelStyle} width={width}>
         {label}
       </Text>
       {isEditing ? (
@@ -110,44 +120,38 @@ function AddressEntry({
             placeholder="Street 1"
             value={localData.street1}
             onChange={(e) => handleInputChange(e, 'street1')}
-            mb={1}
             ref={inputRef}
-            backgroundColor="green.50"
+            {...inputStyle}
           />
           <Input
             placeholder="Street 2"
             value={localData.street2}
             onChange={(e) => handleInputChange(e, 'street2')}
-            mb={1}
-            backgroundColor="green.50"
+            {...inputStyle}
           />
           <Input
             placeholder="City"
             value={localData.city}
             onChange={(e) => handleInputChange(e, 'city')}
-            mb={1}
-            backgroundColor="green.50"
+            {...inputStyle}
           />
           <Input
             placeholder="State"
             value={localData.state}
             onChange={(e) => handleInputChange(e, 'state')}
-            mb={1}
-            backgroundColor="green.50"
+            {...inputStyle}
           />
           <Input
             placeholder="Postal Code"
             value={localData.postalCode}
             onChange={(e) => handleInputChange(e, 'postalCode')}
-            mb={1}
-            backgroundColor="green.50"
+            {...inputStyle}
           />
           <Input
             placeholder="Country"
             value={localData.country}
             onChange={(e) => handleInputChange(e, 'country')}
-            mb={1}
-            backgroundColor="green.50"
+            {...inputStyle}
           />
           <Flex mb={1} direction="row">
             <Button onClick={handleSave} {...saveButtonStyle}>

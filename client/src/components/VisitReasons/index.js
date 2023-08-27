@@ -20,10 +20,15 @@ import {
   Center,
 } from '@chakra-ui/react'
 import { useAppState } from '../../utils/AppContext'
-import { SET_VISIT_REASONS } from '../../utils/actions'
+import {
+  SET_VISIT_REASONS,
+  LOGOUT,
+  SET_CURRENT_PAGE,
+} from '../../utils/actions'
 import { useMutation } from '@apollo/client'
 import { UPDATE_VISIT_REASONS } from '../../utils/graphql/visitReasonMutations'
 import { arraysOfObjectsAreEqual } from '../../utils/utils'
+import Auth from '../../utils/auth'
 
 function sanitise(text) {
   // Implement a sanitization function based on your needs
@@ -34,10 +39,11 @@ function VisitReason({ appointmentId }) {
   const { state, dispatch } = useAppState()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [reasons, setReasons] = useState(state.visitReasons)
-  const [currentText, setCurrentText] = useState('')
+  const [currentText, setCurrentText] = useState('') // this is the text in the modal
   const [selectedReasonIndex, setSelectedReasonIndex] = useState(null)
   const [deletedReasonIds, setDeletedReasonIds] = useState([]) // KEEP TRACK OF DELETED REASONS
   const [lastSavedData, setLastSavedData] = useState([]) // this is the last saved data from the database
+  const [selectValue, setSelectValue] = useState('default') // this is the value of the select element
   const [updateVisitReasons, { loading, error, data }] =
     useMutation(UPDATE_VISIT_REASONS)
 
@@ -51,14 +57,14 @@ function VisitReason({ appointmentId }) {
   const cancelButtonStyle = {
     fontWeight: 'normal',
     color: 'blue.50',
-    bgColor: 'blue.500',
+    bgColor: 'headerFooterBg.500',
     _hover: { bgColor: 'blue.800' },
   }
 
   const editButtonStyle = {
     fontWeight: 'normal',
     color: isValid ? 'blue.50' : 'red.50',
-    bgColor: isValid ? 'blue.500' : 'red.800',
+    bgColor: isValid ? 'headerFooterBg.500' : 'red.800',
     _hover: { bgColor: isValid ? 'blue.800' : 'red.800' },
   }
   const deleteButtonStyle = {
@@ -68,26 +74,49 @@ function VisitReason({ appointmentId }) {
     _hover: { bgColor: 'red.800' },
   }
 
+  //Select value
+  const handleChange = (e) => {
+    const { value } = e.target
+
+    if (value === 'custom') {
+      onOpen()
+    } else if (value !== 'default') {
+      const selectedText = e.target.options[e.target.selectedIndex].text
+      handleAdd(selectedText)
+    }
+
+    // Reset the Select value to "default"
+    setSelectValue('default')
+  }
+
   const handleAdd = (reason) => {
+    onClose()
+    setCurrentText('')
     if (!reason) {
       return
     }
     if (reason.length === 0) {
       return
     }
+    // Check if the reason already exists
+    const isDuplicate = reasons.some(
+      (r) => r.reason.toLowerCase() === reason.toLowerCase()
+    )
 
     // adding a reason to the array
-    const newReason = { id: null, reason: reason, appointmentId: appointmentId }
-    const reasonList = [...reasons, newReason]
-    setReasons(reasonList) // set the local state
-    onClose()
-    setCurrentText('')
-    console.log('reasonList in handleAdd', reasonList)
-    updateStateAndSaveToDatabase(reasonList)
+    if (!isDuplicate) {
+      const newReason = {
+        id: null,
+        reason: reason,
+        appointmentId: appointmentId,
+      }
+      const reasonList = [...reasons, newReason]
+      setReasons(reasonList) // set the local state
+      updateStateAndSaveToDatabase(reasonList)
+    }
   }
 
   const handleSave = () => {
-    console.log('state visitReasons', state.visitReasons)
     const sanitisedText = sanitise(currentText)
     let reasonsList = []
     if (selectedReasonIndex !== null) {
@@ -98,19 +127,26 @@ function VisitReason({ appointmentId }) {
       setSelectedReasonIndex(null)
       // close the modal if it is open
       onClose()
+      setCurrentText('')
       updateStateAndSaveToDatabase(reasonsList)
     } else {
       // Add
       reasonsList = handleAdd(sanitisedText)
     }
   }
+
+  // Cancel the modal and reset the current text
+  const handleCancelModal = () => {
+    onClose()
+    setCurrentText('')
+  }
+
   const handleDelete = () => {
     if (selectedReasonIndex !== null) {
       // copy the array
       const reasonList = [...reasons]
       // get the id of the reason to delete
       const deletedReasonId = reasonList[selectedReasonIndex].id
-      console.log('deletedReasonId', deletedReasonId)
       // add the id to the deletedReasonIds array
       setDeletedReasonIds((prev) => [...prev, deletedReasonId])
       // remove the reason from the array
@@ -149,31 +185,45 @@ function VisitReason({ appointmentId }) {
           appointmentId: appointmentId,
         }
       })
+      if (Auth.loggedIn()) {
+        try {
+          const response = await updateVisitReasons({
+            variables: {
+              appointmentId: appointmentId,
+              visitReasons: savedList,
+              deletedReasonIds: itemsToDelete,
+            },
+          })
 
-      try {
-        const response = await updateVisitReasons({
-          variables: {
-            appointmentId: appointmentId,
-            visitReasons: savedList,
-            deletedReasonIds: itemsToDelete,
-          },
+          // Do something with the response
+          let newList = response.data.updateVisitReasons
+          newList = newList.map((reason) => {
+            return {
+              id: reason.id,
+              reason: reason.reason,
+              appointmentId: appointmentId,
+            }
+          })
+          // set the last saved data
+          setReasons([...newList])
+          setLastSavedData([...newList])
+          setDeletedReasonIds([])
+        } catch (err) {
+          console.error('Error updating visit reasons:', err)
+        }
+      } else {
+        // not logged in
+        // update state
+        Auth.logout()
+
+        dispatch({
+          type: LOGOUT,
         })
 
-        // Do something with the response
-        let newList = response.data.updateVisitReasons
-        newList = newList.map((reason) => {
-          return {
-            id: reason.id,
-            reason: reason.reason,
-            appointmentId: appointmentId,
-          }
+        dispatch({
+          type: SET_CURRENT_PAGE,
+          payload: 'login',
         })
-        // set the last saved data
-        setReasons([...newList])
-        setLastSavedData([...newList])
-        setDeletedReasonIds([])
-      } catch (err) {
-        console.error('Error updating visit reasons:', err)
       }
     }
   }
@@ -188,19 +238,15 @@ function VisitReason({ appointmentId }) {
         </Center>
       </Box>
       <Select
-        onChange={(e) => {
-          if (e.target.value === 'custom') {
-            onOpen()
-          } else if (e.target.value === '') {
-            // do nothing
-          } else {
-            const selectedText = e.target.options[e.target.selectedIndex].text
-            handleAdd(selectedText)
-          }
-        }}
+        value={selectValue}
+        onChange={handleChange}
         my={1}
+        height={'2rem'}
       >
-        <option value="">Choose reasons from this list</option>
+        <option value="default">
+          Choose existing reasons from this list or create your own
+        </option>
+        <option value="custom">Add a Custom Reason</option>
         <option value="routine">
           Routine Checkup of eye health and vision
         </option>
@@ -215,7 +261,6 @@ function VisitReason({ appointmentId }) {
         <option value="child">Child's vision assessment</option>
         <option value="myopia">Myopia control</option>
         <option value="follow-up">Following up a recent visit</option>
-        <option value="custom">Add a Custom Reason</option>
       </Select>
       <Box
         border="1px"
@@ -230,7 +275,7 @@ function VisitReason({ appointmentId }) {
             <ListItem
               key={index}
               onClick={() => setSelectedReasonIndex(index)}
-              bg={selectedReasonIndex === index ? 'green.100' : ''}
+              bg={selectedReasonIndex === index ? 'green.100' : 'green.50'}
               p={2}
               m={1}
               borderRadius="md"
@@ -265,7 +310,10 @@ function VisitReason({ appointmentId }) {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader bgColor="blue.200">
+          <ModalHeader
+            bgColor="panelLightText.500"
+            color="headerFooterText.500"
+          >
             Add or Edit your reason for attending
           </ModalHeader>
           <ModalCloseButton />
@@ -275,13 +323,14 @@ function VisitReason({ appointmentId }) {
               onChange={(e) => setCurrentText(e.target.value)}
               m={0}
               width={'100%'}
+              autoFocus
             />
           </ModalBody>
           <ModalFooter p={2}>
             <Button mx={1} onClick={handleSave} {...saveButtonStyle}>
               Save
             </Button>
-            <Button mx={1} onClick={onClose} {...cancelButtonStyle}>
+            <Button mx={1} onClick={handleCancelModal} {...cancelButtonStyle}>
               Cancel
             </Button>
           </ModalFooter>

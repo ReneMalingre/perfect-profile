@@ -12,6 +12,7 @@ import {
   SET_VISIT_REASONS,
   SET_NEW_CLIENT_QUESTIONS,
   SET_VISUAL_NEEDS,
+  SET_PAST_OCULAR_HISTORY,
 } from './actions' // import action type
 
 import { setNestedObjectValue } from './utils'
@@ -46,7 +47,6 @@ export const reducer = (state, action) => {
         ...state,
         userData: action.payload,
       }
-      console.log('SET_USER_DATA returnedState', returnedState)
       return returnedState
     case SET_USER_SINGLE_VALUE:
       // Create a deep copy of state.userData
@@ -97,10 +97,14 @@ export const reducer = (state, action) => {
         newClientQuestions: action.payload,
       }
     case SET_VISUAL_NEEDS:
-      console.log('SET_VISUAL_NEEDS action.payload', action.payload)
       return {
         ...state,
         visualNeeds: action.payload,
+      }
+    case SET_PAST_OCULAR_HISTORY:
+      return {
+        ...state,
+        pastOcularHistory: action.payload,
       }
     default:
       console.log('Unknown action: ' + action.type)

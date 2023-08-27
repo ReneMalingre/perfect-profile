@@ -117,3 +117,9 @@ export const SET_NEW_CLIENT_QUESTIONS = 'SET_NEW_CLIENT_QUESTIONS'
     * - sets the visual needs data in state
     * */
 export const SET_VISUAL_NEEDS = 'SET_VISUAL_NEEDS'
+
+/* SET_PAST_OCULAR_HISTORY
+ * - payload: past ocular history data object
+ * - sets the past ocular history data in state
+ * */
+export const SET_PAST_OCULAR_HISTORY = 'SET_PAST_OCULAR_HISTORY'

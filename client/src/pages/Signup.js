@@ -24,7 +24,6 @@ const Signup = () => {
 
   const [addUser, { error }] = useMutation(CREATE_USER)
   const [signupError, setSignupError] = useState(null)
-  // Use AppContext to update currentPage
   const { state, dispatch } = useAppState()
 
   const handleInputChange = (event) => {

@@ -9,18 +9,24 @@ import {
   Radio,
   RadioGroup,
   chakra,
+  Center,
 } from '@chakra-ui/react'
 
 import RenderRow from '../RenderRow'
 import { useMutation } from '@apollo/client'
 import { useAppState } from '../../utils/AppContext'
 import { UPDATE_NEW_CLIENT_QUESTIONS_BY_USER_ID } from '../../utils/graphql/newClientMutations'
-import { SET_NEW_CLIENT_QUESTIONS } from '../../utils/actions'
+import {
+  SET_NEW_CLIENT_QUESTIONS,
+  LOGOUT,
+  SET_CURRENT_PAGE,
+} from '../../utils/actions'
 import {
   omitTypename,
   setNestedObjectValue,
   deepEqual,
 } from '../../utils/utils'
+import Auth from '../../utils/auth'
 
 function NewClientQueries() {
   const { state, dispatch } = useAppState()
@@ -33,8 +39,8 @@ function NewClientQueries() {
   const renderLabelStyle = {
     fontSize: 'sm',
     fontWeight: 'normal',
-    fontStyle: 'italic',
-    paddingLeft: '0px',
+    fontStyle: 'normal',
+    paddingLeft: '12px',
   }
 
   // get the width of the longest label
@@ -85,31 +91,49 @@ function NewClientQueries() {
 
     // update the database
     if (!lastSavedData || !deepEqual(updatedData, lastSavedData)) {
-      const queryUserId = state.userData.id
+      if (Auth.loggedIn()) {
+        const queryUserId = state.userData.id
 
-      try {
-        const userInput = {
-          ...updatedData,
+        try {
+          const userInput = {
+            ...updatedData,
+          }
+
+          const { data, errors } = await updateNewClientQuestionsByUserId({
+            variables: { userId: queryUserId, input: userInput },
+          })
+
+          if (errors) {
+            console.error('Errors from server:', errors)
+            return
+          }
+
+          // update the state with the returned data
+          if (data) {
+            const returnedData = JSON.parse(
+              JSON.stringify(
+                data.updateNewClientQuestionsByUserId,
+                omitTypename
+              )
+            )
+            setLastSavedData(returnedData)
+          }
+        } catch (error) {
+          console.error('Network error:', error)
         }
+      } else {
+        // not logged in
+        // update state
+        Auth.logout()
 
-        const { data, errors } = await updateNewClientQuestionsByUserId({
-          variables: { userId: queryUserId, input: userInput },
+        dispatch({
+          type: LOGOUT,
         })
 
-        if (errors) {
-          console.error('Errors from server:', errors)
-          return
-        }
-
-        // update the state with the returned data
-        if (data) {
-          const returnedData = JSON.parse(
-            JSON.stringify(data.updateNewClientQuestionsByUserId, omitTypename)
-          )
-          setLastSavedData(returnedData)
-        }
-      } catch (error) {
-        console.error('Network error:', error)
+        dispatch({
+          type: SET_CURRENT_PAGE,
+          payload: 'login',
+        })
       }
     }
   }
@@ -130,7 +154,7 @@ function NewClientQueries() {
   }
 
   return (
-    <Box padding="5" bg="white" boxShadow="md" borderRadius="md">
+    <Box>
       {/* Invisible text to get its width using chakra */}
       <chakra.div
         ref={longestLabelRef}
@@ -140,14 +164,18 @@ function NewClientQueries() {
       >
         How would you like them improved?&nbsp;&nbsp;
       </chakra.div>
-      <Text fontSize="xl" fontWeight="bold" mb={4}>
-        New Client Questions
-      </Text>
-
-      <Stack spacing={5}>
+      <Center>
+        <Text fontSize="xl" fontWeight="bold" mb={4}>
+          Questions for New Clients
+        </Text>
+      </Center>
+      <Stack spacing={4}>
         <FormControl>
-          <FormLabel>Why did you choose Adelaide Eye Care?</FormLabel>
+          <FormLabel fontWeight="bold">
+            Why did you choose Adelaide Eye Care?
+          </FormLabel>
           <Select
+            height={'2rem'}
             value={state.newClientQuestions.reasonForChoosing}
             onChange={(e) =>
               handleDataChange(e.target.value, 'reasonForChoosing')
@@ -163,18 +191,21 @@ function NewClientQueries() {
             state.newClientQuestions.reasonForChoosing === 'friend') && (
             <RenderRow
               label="Who can we thank?"
-              data={state.newClientQuestions.contactLensTypes}
+              data={state.newClientQuestions.whoToThank}
               width={labelWidth}
               onDataChange={(newData) =>
                 handleDataChange(newData, 'whoToThank')
               }
               labelStyle={renderLabelStyle}
+              inputPrompt="eg Dr Smith, Jane Doe"
             />
           )}
         </FormControl>
 
         <FormControl>
-          <FormLabel>Is this your First Eye Examination?</FormLabel>
+          <FormLabel fontWeight="bold">
+            Is this your First Eye Examination?
+          </FormLabel>
           <RadioGroup
             value={state.newClientQuestions.firstEyeExam ? 'yes' : 'no'}
             onChange={(value) =>
@@ -190,10 +221,10 @@ function NewClientQueries() {
               </Radio>
             </Stack>
           </RadioGroup>
-          {state.newClientQuestions.firstEyeExam && (
-            <Box mt={3}>
+          {!state.newClientQuestions.firstEyeExam && (
+            <Box mt={2}>
               <RenderRow
-                label="Approx. how long ago was your last eye examination?"
+                label="How long ago was your previous?"
                 data={state.newClientQuestions.timeSinceLastExam}
                 width={labelWidth}
                 onDataChange={(newData) =>
@@ -201,13 +232,16 @@ function NewClientQueries() {
                 }
                 labelStyle={renderLabelStyle}
                 validate={validateCompulsoryTextEntry}
+                inputPrompt="eg 2 years, 1 month"
               />
             </Box>
           )}
         </FormControl>
 
         <FormControl>
-          <FormLabel>Do you currently wear spectacles?</FormLabel>
+          <FormLabel fontWeight="bold">
+            Do you currently wear spectacles?
+          </FormLabel>
           <RadioGroup
             value={state.newClientQuestions.spectacleWearer ? 'yes' : 'no'}
             onChange={(value) =>
@@ -224,9 +258,9 @@ function NewClientQueries() {
             </Stack>
           </RadioGroup>
           {state.newClientQuestions.spectacleWearer && (
-            <Box mt={3}>
+            <Box mt={2}>
               <RenderRow
-                label="What specs do you wear (eg multifocals, readers, Rx sunnies)?"
+                label="What types of specs do you wear?"
                 data={state.newClientQuestions.spectacleTypes}
                 width={labelWidth}
                 onDataChange={(newData) =>
@@ -234,6 +268,7 @@ function NewClientQueries() {
                 }
                 labelStyle={renderLabelStyle}
                 validate={validateCompulsoryTextEntry}
+                inputPrompt="eg multifocals, readers, Rx sunnies"
               />
               <RenderRow
                 label="How would you like them improved?"
@@ -243,14 +278,15 @@ function NewClientQueries() {
                   handleDataChange(newData, 'spectacleDesire')
                 }
                 labelStyle={renderLabelStyle}
-                validate={validateCompulsoryTextEntry}
+                validate={validateTextEntry}
+                inputPrompt="eg thinner, clearer, more stylish, more comfortable"
               />
             </Box>
           )}
         </FormControl>
 
         <FormControl>
-          <FormLabel>
+          <FormLabel fontWeight="bold">
             Do currently wear or have you worn contact lenses?
           </FormLabel>
           <RadioGroup
@@ -269,9 +305,9 @@ function NewClientQueries() {
             </Stack>
           </RadioGroup>
           {state.newClientQuestions.contactLensWearer && (
-            <Box mt={3}>
+            <Box mt={2}>
               <RenderRow
-                label="Types you wear:"
+                label="Contact lens types you wear:"
                 data={state.newClientQuestions.contactLensTypes}
                 width={labelWidth}
                 onDataChange={(newData) =>
@@ -279,6 +315,7 @@ function NewClientQueries() {
                 }
                 labelStyle={renderLabelStyle}
                 validate={validateCompulsoryTextEntry}
+                inputPrompt="eg soft, rigid, multifocal, toric"
               />
               <RenderRow
                 label="How often do you wear them?"
@@ -289,6 +326,7 @@ function NewClientQueries() {
                 }
                 labelStyle={renderLabelStyle}
                 validate={validateCompulsoryTextEntry}
+                inputPrompt="eg daily, just for sport, occasionally"
               />
               <RenderRow
                 label="How would you like them improved?"
@@ -298,20 +336,26 @@ function NewClientQueries() {
                   handleDataChange(newData, 'contactLensDesire')
                 }
                 labelStyle={renderLabelStyle}
-                validate={validateCompulsoryTextEntry}
+                validate={validateTextEntry}
+                inputPrompt="eg more comfortable, better vision, less dryness"
               />
             </Box>
           )}
         </FormControl>
         <FormControl>
           <RenderRow
-            label="Is there information we should know about you?"
+            label="Is there other information we should know about you?"
             data={state.newClientQuestions.generalInfo}
             width={labelWidth}
             onDataChange={(newData) => handleDataChange(newData, 'generalInfo')}
-            labelStyle={renderLabelStyle}
+            labelStyle={{
+              ...renderLabelStyle,
+              fontWeight: 'bold',
+              fontSize: 'md',
+            }}
             validate={validateTextEntry}
             isTextArea={true}
+            inputPrompt="eg I'm a bit colour blind, my mother had glaucoma"
           />
         </FormControl>
       </Stack>

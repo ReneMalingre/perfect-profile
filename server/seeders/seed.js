@@ -22,7 +22,7 @@ db.once('open', async () => {
       pastDate.setDate(pastDate.getDate() - (i + 1))
 
       const futureDate = new Date()
-      futureDate.setDate(futureDate.getDate() + (i + 1))
+      futureDate.setDate(futureDate.getDate() + (i + 4))
 
       const locations = [
         {

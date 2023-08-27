@@ -3,13 +3,15 @@ import { Box, Flex, Text, chakra, Center } from '@chakra-ui/react'
 import { useAppState } from '../../utils/AppContext'
 import { useMutation } from '@apollo/client'
 import RenderRow from '../RenderRow'
+import QuestionnaireSubHeading from '../QuestionnaireSubHeading'
 import { UPSERT_VISUAL_NEEDS } from '../../utils/graphql/visualNeedsMutations'
-import { SET_VISUAL_NEEDS } from '../../utils/actions'
+import { SET_VISUAL_NEEDS, LOGOUT, SET_CURRENT_PAGE } from '../../utils/actions'
 import {
   omitTypename,
   setNestedObjectValue,
   deepEqual,
 } from '../../utils/utils'
+import Auth from '../../utils/auth'
 
 function VisualNeeds() {
   const { state, dispatch } = useAppState()
@@ -30,12 +32,11 @@ function VisualNeeds() {
   const renderLabelStyle = {
     fontSize: 'sm',
     fontWeight: 'normal',
-    fontStyle: 'italic',
+    fontStyle: 'normal',
     paddingLeft: '0px',
   }
 
   const handleDataChange = async (newData, rowId) => {
-    console.log('handleDataChange', newData, rowId)
     // update the state using rowId as the direction to the right property
     // ie rowId = 'contactDetails.phone' will update state.userData.contactDetails.phone
     if (newData === null) {
@@ -51,29 +52,22 @@ function VisualNeeds() {
 
     // Create a deep copy of state.visualNeeds
     if (!state.visualNeeds) {
-      console.log('no state.visualNeeds')
       updatedData = { userId: state.userData.id }
       updatedData[rowId] = newData
     } else {
-      console.log('state.visualNeeds exists')
-
       updatedData = JSON.parse(JSON.stringify(state.visualNeeds))
-      console.log('updatedData', updatedData)
 
       // Update the nested property using the utility function
       setNestedObjectValue(updatedData, rowId, newData)
     }
-    console.log('New updatedData', updatedData)
 
     // update the global state
     if (!updatedData) {
-      console.log('no updatedData', rowId, newData)
       return
     }
 
     // update the global state
     if (!updatedData) {
-      console.log('no updatedData', rowId, newData)
       return
     }
 
@@ -84,35 +78,45 @@ function VisualNeeds() {
 
     // update the database
     if (!lastSavedData || !deepEqual(updatedData, lastSavedData)) {
-      console.log('updatedData', updatedData)
-      console.log('lastSavedData', lastSavedData)
-      const queryUserId = state.userData.id
-      try {
-        const userInput = {
-          ...updatedData,
-        }
-        console.log('userInput', userInput)
-        console.log('userId', queryUserId)
+      if (Auth.loggedIn()) {
+        const queryUserId = state.userData.id
+        try {
+          const userInput = {
+            ...updatedData,
+          }
 
-        const { data, errors } = await upsertVisualNeeds({
-          variables: { userId: queryUserId, input: userInput },
+          const { data, errors } = await upsertVisualNeeds({
+            variables: { userId: queryUserId, input: userInput },
+          })
+
+          if (errors) {
+            console.error('Errors from server:', errors)
+            return
+          }
+
+          // update the state with the returned data
+          if (data) {
+            const returnedData = JSON.parse(
+              JSON.stringify(data.upsertVisualNeeds, omitTypename)
+            )
+            setLastSavedData(returnedData)
+          }
+        } catch (error) {
+          console.error('Network error:', error)
+        }
+      } else {
+        // not logged in
+        // update state
+        Auth.logout()
+
+        dispatch({
+          type: LOGOUT,
         })
 
-        if (errors) {
-          console.error('Errors from server:', errors)
-          return
-        }
-
-        // update the state with the returned data
-        if (data) {
-          const returnedData = JSON.parse(
-            JSON.stringify(data.upsertVisualNeeds, omitTypename)
-          )
-          console.log('returnedData', returnedData)
-          setLastSavedData(returnedData)
-        }
-      } catch (error) {
-        console.error('Network error:', error)
+        dispatch({
+          type: SET_CURRENT_PAGE,
+          payload: 'login',
+        })
       }
     }
   }
@@ -134,7 +138,7 @@ function VisualNeeds() {
   }
 
   return (
-    <Box borderWidth="1px" borderRadius="lg" p={4} boxShadow="md">
+    <Box>
       {/* Invisible text to get its width using chakra */}
       <chakra.div
         ref={longestLabelRef}
@@ -150,14 +154,11 @@ function VisualNeeds() {
           Your Visual Needs
         </Text>
       </Center>
-      <Text>explanation here</Text>
       <Text mb={1}>
-        Please review these details below, and correct any errors:
+        Knowing your needs helps us to advise you on the best vision solutions.
       </Text>
       <Flex direction="column">
-        <Text fontSize="xl" fontWeight="bold">
-          Your Occupational Vision Needs:
-        </Text>
+        <QuestionnaireSubHeading heading="Your Occupational Vision Needs:" />
         <RenderRow
           label="Current occupation:"
           data={state.visualNeeds.occupation}
@@ -165,6 +166,7 @@ function VisualNeeds() {
           onDataChange={(newData) => handleDataChange(newData, 'occupation')}
           validate={validateCompulsory}
           labelStyle={renderLabelStyle}
+          inputPrompt="eg accountant, teacher, student, retiree"
         />
         <RenderRow
           label="Job environment:"
@@ -175,6 +177,7 @@ function VisualNeeds() {
           }
           validate={validateTextEntry}
           labelStyle={renderLabelStyle}
+          inputPrompt="eg office, factory, clean, dusty, glary, outdoors"
         />
         <RenderRow
           label="Work screen time/day:"
@@ -185,6 +188,7 @@ function VisualNeeds() {
           }
           validate={validateTextEntry}
           labelStyle={renderLabelStyle}
+          inputPrompt="eg 6 hours/day, desktop 2 screens, 80 cm away"
         />
         <RenderRow
           label="Extended near activities:"
@@ -195,16 +199,18 @@ function VisualNeeds() {
           }
           validate={validateTextEntry}
           labelStyle={renderLabelStyle}
+          inputPrompt="eg drafting, writing, jewellery making"
         />
         <RenderRow
           label="Extended distance activities"
           data={state.visualNeeds.workExtendedDistance}
           width={labelWidth}
           onDataChange={(newData) =>
-            handleDataChange(newData, 'WorkExtendedDistance')
+            handleDataChange(newData, 'workExtendedDistance')
           }
           validate={validateTextEntry}
           labelStyle={renderLabelStyle}
+          inputPrompt="eg surveying 2 hours/day, driving 4 hours/day"
         />
         <RenderRow
           label="Eye safety issues:"
@@ -213,6 +219,7 @@ function VisualNeeds() {
           onDataChange={(newData) => handleDataChange(newData, 'workEyeSafety')}
           validate={validateTextEntry}
           labelStyle={renderLabelStyle}
+          inputPrompt="eg dust, chemicals, UV, heat, glare, grinding"
         />
         <RenderRow
           label="Other job information:"
@@ -223,10 +230,9 @@ function VisualNeeds() {
           }
           validate={validateTextEntry}
           labelStyle={renderLabelStyle}
+          inputPrompt="eg shift work, heavy machinery, night driving"
         />
-        <Text fontSize="xl" fontWeight="bold">
-          Near Vision Needs:
-        </Text>
+        <QuestionnaireSubHeading heading="Near Vision Needs:" />
         <RenderRow
           label="Non-work screen time/day:"
           data={state.visualNeeds.lifeScreenTime}
@@ -236,6 +242,7 @@ function VisualNeeds() {
           }
           validate={validateTextEntry}
           labelStyle={renderLabelStyle}
+          inputPrompt="eg 2 hours social media, 1 hour gaming"
         />
         <RenderRow
           label="Printed reading time/day:"
@@ -246,6 +253,7 @@ function VisualNeeds() {
           }
           validate={validateTextEntry}
           labelStyle={renderLabelStyle}
+          inputPrompt="eg 1 hours during day, 1 hour in bed"
         />
         <RenderRow
           label="Other near activity:"
@@ -254,10 +262,9 @@ function VisualNeeds() {
           onDataChange={(newData) => handleDataChange(newData, 'lifeOtherNear')}
           validate={validateTextEntry}
           labelStyle={renderLabelStyle}
+          inputPrompt="eg sewing, model making, board games"
         />
-        <Text fontSize="xl" fontWeight="bold">
-          Distance Vision Needs:
-        </Text>
+        <QuestionnaireSubHeading heading="Distance Vision Needs:" />
         <RenderRow
           label="Driving hours/day"
           data={state.visualNeeds.lifeDrivingTime}
@@ -267,9 +274,10 @@ function VisualNeeds() {
           }
           validate={validateTextEntry}
           labelStyle={renderLabelStyle}
+          inputPrompt="eg 2 hours during day, 1 at night"
         />
         <RenderRow
-          label="Sports/exercise hours/day:"
+          label="Sports/exercise hours/week:"
           data={state.visualNeeds.lifeExerciseTime}
           width={labelWidth}
           onDataChange={(newData) =>
@@ -277,6 +285,7 @@ function VisualNeeds() {
           }
           validate={validateTextEntry}
           labelStyle={renderLabelStyle}
+          inputPrompt="eg golf 4 hours, netball 2 hours"
         />
         <RenderRow
           label="Types of sport/exercise:"
@@ -287,6 +296,7 @@ function VisualNeeds() {
           }
           validate={validateTextEntry}
           labelStyle={renderLabelStyle}
+          inputPrompt="eg running, gym, pilates"
         />
         <RenderRow
           label="Other distance activity:"
@@ -297,18 +307,21 @@ function VisualNeeds() {
           }
           validate={validateTextEntry}
           labelStyle={renderLabelStyle}
+          inputPrompt="eg walking, hiking, bird watching"
         />
-        <Text fontSize="xl" fontWeight="bold">
-          Other Visual Needs:
-        </Text>
         <RenderRow
           label="What else do we need to know about your vision needs?"
           data={state.visualNeeds.generalInfo}
           width={labelWidth}
           onDataChange={(newData) => handleDataChange(newData, 'generalInfo')}
           validate={validateTextEntry}
-          labelStyle={renderLabelStyle}
+          labelStyle={{
+            ...renderLabelStyle,
+            fontWeight: 'bold',
+            fontSize: 'md',
+          }}
           isTextArea={true}
+          inputPrompt="Please enter any other information about your vision needs you think will be helpful to us to help you."
         />
       </Flex>
     </Box>

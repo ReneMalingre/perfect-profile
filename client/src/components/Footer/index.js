@@ -1,8 +1,17 @@
 import React from 'react'
-import { IconButton, Flex, Link, Text } from '@chakra-ui/react'
-import { FaFacebook, FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa'
+import {
+  Flex,
+  Link,
+  Text,
+  Image,
+  Spacer,
+  useBreakpointValue,
+} from '@chakra-ui/react'
+import adelaideEyeCareLogo from '../../assets/images/logos/aec-logo.png'
 
 const Footer = () => {
+  const isMdUp = useBreakpointValue({ base: false, md: true })
+
   return (
     <Flex
       as="footer"
@@ -12,39 +21,45 @@ const Footer = () => {
       mt="auto"
       align="center"
       justifyContent="center"
-      bg="deepCyan.500"
+      bg="headerFooterBg.500"
       color="white"
     >
       <Flex
-        direction={['column', 'row']}
+        direction={isMdUp ? 'row' : 'column'}
         align="center"
-        justify="center"
+        justify="space-between"
+        width={['full', '80%']}
         mb={2}
       >
-        <Link href="https://www.adelaideeyecare.com.au" isExternal mx={5}>
-          <IconButton
-            aria-label="Github Profile"
-            icon={<FaGithub fontSize="32px" />}
-            size="md"
-            color="headerFooterText.500"
-            variant="ghost"
-            _hover={{ color: 'deepCyan.500', bg: 'headerFooterText.500' }}
+        <Link
+          href="https://www.adelaideeyecare.com.au"
+          isExternal
+          mx={5}
+          mt={isMdUp ? 2 : 4}
+        >
+          <Image
+            src={adelaideEyeCareLogo}
+            alt="Adelaide Eye Care"
+            boxSize="60px"
+            _hover={{
+              filter: 'brightness(0.8)',
+            }}
           />
         </Link>
-        <Link href="https://twitter.com/ReneMalingre" isExternal mx={5}>
-          <IconButton
-            aria-label="Twitter Profile"
-            icon={<FaFacebook fontSize="28px" />}
-            size="md"
-            color="headerFooterText.500"
-            variant="ghost"
-            _hover={{ color: 'deepCyan.500', bg: 'headerFooterText.500' }}
-          />
+
+        <Text align="center" mt={isMdUp ? 0 : 2} color="headerFooterText.500">
+          © {new Date().getFullYear()} Rene Malingre
+        </Text>
+
+        <Link
+          href="https://aecwebresources.s3.ap-southeast-2.amazonaws.com/Bootcamp/documents/privacy-policy.pdf"
+          isExternal
+          mx={5}
+          mt={isMdUp ? 0 : 2}
+        >
+          Privacy Policy
         </Link>
       </Flex>
-      <Text align="center" mt={0} mb={2} color="headerFooterText.500">
-        © {new Date().getFullYear()} Rene Malingre
-      </Text>
     </Flex>
   )
 }

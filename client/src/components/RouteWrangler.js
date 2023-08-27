@@ -18,14 +18,11 @@ const RouteWrangler = ({ children }) => {
       case 'signup':
         navigate('/signup')
         break
-      case 'questionnaire':
-        navigate('/questionnaire')
-        break
       case 'profile':
         navigate('/profile')
         break
       default:
-        console.log('Unknown page:', state.currentPage)
+        navigate('/')
         break
     }
   }, [state.currentPage, navigate])

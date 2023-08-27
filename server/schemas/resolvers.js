@@ -6,6 +6,7 @@ const {
   Optometrist,
   NewClientQuestions,
   VisualNeeds,
+  PastOcularHistory,
 } = require('../models')
 const { signToken } = require('../utils/auth')
 
@@ -53,7 +54,7 @@ const resolvers = {
     getCurrentUser: async (parent, args, context) => {
       if (context.user) {
         try {
-          return User.findById({ _id: context.user._id })
+          return await User.findById({ _id: context.user._id })
         } catch (error) {
           throw new Error(`Failed to fetch user. Error: ${error.message}`)
         }
@@ -150,6 +151,161 @@ const resolvers = {
         return visualNeeds
       } catch (error) {
         throw new Error(error.message)
+      }
+    },
+    getPastOcularHistoryByUserId: async (_, { userId }) => {
+      try {
+        let pastOcularHistory = await PastOcularHistory.findOne({ userId })
+        if (!pastOcularHistory) {
+          pastOcularHistory = new PastOcularHistory({ userId })
+          await pastOcularHistory.save()
+        }
+        return pastOcularHistory
+      } catch (error) {
+        console.error('Error fetching past ocular history: ', error)
+        throw new Error(error.message)
+      }
+    },
+    getLoginInfo: async (parent, args, context) => {
+      let userData = null
+      // console.log(context)
+      if (context.user) {
+        console.log('context.user', context.user)
+        try {
+          userData = await User.findById({ _id: context.user._id })
+        } catch (error) {
+          throw new Error(`Failed to fetch user. Error: ${error.message}`)
+        }
+      } else {
+        throw new AuthenticationError('Not logged in')
+      }
+      console.log('userData', userData)
+      // recreate the token
+      const token = signToken({
+        email: userData.contactDetails.email,
+        username: userData.username,
+        _id: userData._id,
+      })
+
+      // now get the next appointment for this user
+      let nextAppointment = null
+      let visitReasons = []
+      let appointmentOptometrist = null
+      let newClientQuestions = null
+      let visualNeeds = null
+      let pastOcularHistory = null
+
+      const today = new Date()
+      const currentTime = `${today.getHours() - 1}:${String(
+        today.getMinutes()
+      ).padStart(2, '0')}` // get current time less one hour in HH:mm format
+
+      try {
+        console.log('fetching next appointment')
+        console.log('userId', userData._id)
+        const doc = await Appointment.findOne({
+          userId: userData._id,
+          $or: [
+            {
+              appointmentDate: { $gt: today },
+            },
+            {
+              appointmentDate: { $eq: today },
+              appointmentTime: { $gte: currentTime },
+            },
+          ],
+        }).sort({ appointmentDate: 1, appointmentTime: 1 }) // sort by date, then by time
+        if (doc) {
+          // convert appointmentDate to ISO string
+          nextAppointment = doc.toObject()
+          nextAppointment.appointmentDate = doc.appointmentDate
+            .toISOString()
+            .split('T')[0]
+        }
+        console.log('next appointment', nextAppointment)
+        if (nextAppointment) {
+          try {
+            appointmentOptometrist = await Optometrist.findById(
+              nextAppointment.optometristId
+            )
+          } catch (error) {
+            console.log('error fetching appointment optometrist', error)
+          }
+          try {
+            visitReasons = await VisitReason.find({
+              appointmentId: nextAppointment._id,
+            })
+          } catch (error) {
+            console.log('error fetching visit reasons', error)
+          }
+        }
+      } catch (error) {
+        console.log('error fetching next appointment', error)
+      }
+
+      if (userData.isNewClient) {
+        console.log(userData._id)
+
+        try {
+          // this will create one if it doesn't exist
+          newClientQuestions = await NewClientQuestions.findOneAndUpdate(
+            {
+              userId: userData._id,
+            },
+            {},
+            {
+              upsert: true,
+              new: true,
+              setDefaultsOnInsert: true,
+            }
+          )
+        } catch (error) {
+          console.log('error fetching new client questions', error)
+        }
+      }
+
+      try {
+        // this is an upsert, so it will create a new record if one doesn't exist
+        visualNeeds = await VisualNeeds.findOneAndUpdate(
+          {
+            userId: userData._id,
+          },
+          {},
+          {
+            upsert: true,
+            new: true,
+            setDefaultsOnInsert: true,
+          }
+        )
+      } catch (error) {
+        console.log('error fetching visual needs', error)
+      }
+      try {
+        // this is an upsert, so it will create a new record if one doesn't exist
+        pastOcularHistory = await PastOcularHistory.findOneAndUpdate(
+          {
+            userId: userData._id,
+          },
+          {},
+          {
+            upsert: true,
+            new: true,
+            setDefaultsOnInsert: true,
+          }
+        )
+      } catch (error) {
+        console.log('error fetching past ocular history', error)
+      }
+
+      return {
+        token, // contains username and _id
+        user: userData,
+        appointment: nextAppointment || null,
+        visitReasons: visitReasons || [],
+        optometrist: appointmentOptometrist || null,
+        newClientQuestions: newClientQuestions || null,
+        visualNeeds: visualNeeds || null,
+        pastOcularHistory: pastOcularHistory || null,
       }
     },
   },
@@ -277,6 +433,7 @@ const resolvers = {
         let appointmentOptometrist = null
         let newClientQuestions = null
         let visualNeeds = null
+        let pastOcularHistory = null
 
         const today = new Date()
         const currentTime = `${today.getHours() - 1}:${String(
@@ -311,7 +468,6 @@ const resolvers = {
               appointmentOptometrist = await Optometrist.findById(
                 nextAppointment.optometristId
               )
-              console.log('appointmentOptometrist', appointmentOptometrist)
             } catch (error) {
               console.log('error fetching appointment optometrist', error)
             }
@@ -319,7 +475,6 @@ const resolvers = {
               visitReasons = await VisitReason.find({
                 appointmentId: nextAppointment._id,
               })
-              console.log('visitReasons', visitReasons)
             } catch (error) {
               console.log('error fetching visit reasons', error)
             }
@@ -344,15 +499,12 @@ const resolvers = {
                 setDefaultsOnInsert: true,
               }
             )
-
-            console.log('newClientQuestions', newClientQuestions)
           } catch (error) {
             console.log('error fetching new client questions', error)
           }
         }
 
         try {
-          console.log(userData._id)
           // this is an upsert, so it will create a new record if one doesn't exist
           visualNeeds = await VisualNeeds.findOneAndUpdate(
             {
@@ -365,9 +517,24 @@ const resolvers = {
               setDefaultsOnInsert: true,
             }
           )
-          console.log('visualNeeds', visualNeeds)
         } catch (error) {
           console.log('error fetching visual needs', error)
+        }
+        try {
+          // this is an upsert, so it will create a new record if one doesn't exist
+          pastOcularHistory = await PastOcularHistory.findOneAndUpdate(
+            {
+              userId: userData._id,
+            },
+            {},
+            {
+              upsert: true,
+              new: true,
+              setDefaultsOnInsert: true,
+            }
+          )
+        } catch (error) {
+          console.log('error fetching past ocular history', error)
         }
 
         return {
@@ -378,6 +545,7 @@ const resolvers = {
           optometrist: appointmentOptometrist || null,
           newClientQuestions: newClientQuestions || null,
           visualNeeds: visualNeeds || null,
+          pastOcularHistory: pastOcularHistory || null,
         }
       } catch (error) {
         throw new Error(
@@ -590,6 +758,23 @@ const resolvers = {
         return updatedVisualNeeds
       } catch (error) {
         throw new Error(error)
+      }
+    },
+    upsertPastOcularHistory: async (_, { userId, input }) => {
+      try {
+        const pastOcularHistory = await PastOcularHistory.findOneAndUpdate(
+          { userId },
+          { ...input },
+          {
+            new: true, // Return the updated document
+            upsert: true, // Create if doesn't exist
+            setDefaultsOnInsert: true, // Set default values if not specified
+          }
+        )
+        return pastOcularHistory
+      } catch (error) {
+        console.error('Error upserting past ocular history: ', error)
+        throw new Error(error.message)
       }
     },
   },

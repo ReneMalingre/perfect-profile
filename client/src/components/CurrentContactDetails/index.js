@@ -7,13 +7,14 @@ import RenderRow from '../RenderRow'
 import AddressEntry from '../AddressEntry'
 import NameEntry from '../NameEntry'
 import { UPDATE_USER } from '../../utils/graphql/userMutations'
-import { SET_USER_DATA } from '../../utils/actions'
+import { SET_USER_DATA, LOGOUT, SET_CURRENT_PAGE } from '../../utils/actions'
 import {
   omitTypename,
   setNestedObjectValue,
   deepEqual,
 } from '../../utils/utils'
 import dayjs from 'dayjs'
+import Auth from '../../utils/auth'
 
 function CurrentContactDetails() {
   const { state, dispatch } = useAppState()
@@ -28,6 +29,13 @@ function CurrentContactDetails() {
       setLabelWidth(longestLabelRef.current.offsetWidth)
     }
   }, [longestLabelRef])
+
+  const renderLabelStyle = {
+    fontSize: 'sm',
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    paddingLeft: '0px',
+  }
 
   const handleDataChange = async (newData, rowId) => {
     // update the state using rowId as the direction to the right property
@@ -58,7 +66,6 @@ function CurrentContactDetails() {
 
     // update the global state
     if (!updatedData) {
-      console.log('no updatedData', rowId, newData)
       return
     }
 
@@ -70,34 +77,44 @@ function CurrentContactDetails() {
     // update the database
     // updatedData is the userData
     if (!lastSavedData || !deepEqual(updatedData, lastSavedData)) {
-      console.log('updatedData', updatedData)
-      console.log('lastSavedData', lastSavedData)
-      try {
-        const userInput = {
-          id: updatedData.id,
-          ...updatedData,
-        }
-        console.log('userInput', userInput)
+      if (Auth.loggedIn()) {
+        try {
+          const userInput = {
+            id: updatedData.id,
+            ...updatedData,
+          }
 
-        const { data, errors } = await updateUser({
-          variables: { input: userInput },
+          const { data, errors } = await updateUser({
+            variables: { input: userInput },
+          })
+
+          if (errors) {
+            console.error('Errors from server:', errors)
+            return
+          }
+          // update the state with the returned data
+          if (data) {
+            const returnedData = JSON.parse(
+              JSON.stringify(data.updateUser, omitTypename)
+            )
+            setLastSavedData(returnedData)
+          }
+        } catch (error) {
+          console.error('Network error:', error)
+        }
+      } else {
+        // not logged in
+        // update state
+        Auth.logout()
+
+        dispatch({
+          type: LOGOUT,
         })
 
-        if (errors) {
-          console.error('Errors from server:', errors)
-          return
-        }
-        console.log('returned data from updating userData', data)
-        // update the state with the returned data
-        if (data) {
-          const returnedData = JSON.parse(
-            JSON.stringify(data.updateUser, omitTypename)
-          )
-          console.log('returnedData', returnedData)
-          setLastSavedData(returnedData)
-        }
-      } catch (error) {
-        console.error('Network error:', error)
+        dispatch({
+          type: SET_CURRENT_PAGE,
+          payload: 'login',
+        })
       }
     }
   }
@@ -147,14 +164,15 @@ function CurrentContactDetails() {
     return regex.test(data)
   }
 
-  return (
-    <Box borderWidth="1px" borderRadius="lg" p={4} boxShadow="md">
+  return state.userData ? (
+    <Box>
       {/* Invisible text to get its width using chakra */}
       <chakra.div
         ref={longestLabelRef}
         position="absolute"
         opacity="0"
         fontWeight="bold"
+        {...renderLabelStyle}
       >
         Other Practitioners:&nbsp;&nbsp;
       </chakra.div>
@@ -176,12 +194,14 @@ function CurrentContactDetails() {
           onDataChange={(newData) =>
             handleDataChange(newData, 'contactDetails.address')
           }
+          labelStyle={renderLabelStyle}
         />
         <NameEntry
           label="Name:"
           data={state.userData.nameDetails}
           width={labelWidth}
           onDataChange={(newData) => handleDataChange(newData, 'nameDetails')}
+          labelStyle={renderLabelStyle}
         />
         <RenderRow
           label="Phone:"
@@ -191,6 +211,7 @@ function CurrentContactDetails() {
             handleDataChange(newData, 'contactDetails.phone')
           }
           validate={phoneValidation}
+          labelStyle={renderLabelStyle}
         />
         <RenderRow
           label="Email:"
@@ -200,6 +221,7 @@ function CurrentContactDetails() {
             handleDataChange(newData, 'contactDetails.email')
           }
           validate={emailValidation}
+          labelStyle={renderLabelStyle}
           formatData={(data) => data.toLowerCase()}
         />
         <RenderRow
@@ -208,6 +230,7 @@ function CurrentContactDetails() {
           width={labelWidth}
           onDataChange={(newData) => handleDataChange(newData, 'dateOfBirth')}
           validate={dateValidation}
+          labelStyle={renderLabelStyle}
           formatData={dateFormatter}
         />
         <RenderRow
@@ -215,6 +238,7 @@ function CurrentContactDetails() {
           data={state.userData.healthFund}
           width={labelWidth}
           onDataChange={(newData) => handleDataChange(newData, 'healthFund')}
+          labelStyle={renderLabelStyle}
         />
         <RenderRow
           label="Your GP:"
@@ -223,15 +247,16 @@ function CurrentContactDetails() {
           onDataChange={(newData) =>
             handleDataChange(newData, 'healthProfessionals.gp')
           }
+          labelStyle={renderLabelStyle}
         />
         <RenderRow
           label="Suburb:"
           data={state.userData.healthProfessionals.gpAddress}
           width={labelWidth}
+          labelStyle={{ ...renderLabelStyle, paddingLeft: '16px' }}
           onDataChange={(newData) =>
             handleDataChange(newData, 'healthProfessionals.gpAddress')
           }
-          labelStyle={{ paddingLeft: '16px' }}
         />
 
         <RenderRow
@@ -241,6 +266,7 @@ function CurrentContactDetails() {
           onDataChange={(newData) =>
             handleDataChange(newData, 'healthProfessionals.ophthalmologist')
           }
+          labelStyle={renderLabelStyle}
         />
 
         <RenderRow
@@ -253,7 +279,7 @@ function CurrentContactDetails() {
               'healthProfessionals.ophthalmologistAddress'
             )
           }
-          labelStyle={{ paddingLeft: '16px' }}
+          labelStyle={{ ...renderLabelStyle, paddingLeft: '16px' }}
         />
 
         <RenderRow
@@ -266,9 +292,12 @@ function CurrentContactDetails() {
               'healthProfessionals.otherHealthProfessionals'
             )
           }
+          labelStyle={renderLabelStyle}
         />
       </Flex>
     </Box>
+  ) : (
+    <Text>No user data</Text>
   )
 }
 

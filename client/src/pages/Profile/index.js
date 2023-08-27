@@ -1,32 +1,41 @@
 import React from 'react'
 import { useAppState } from '../../utils/AppContext'
-import { SET_CURRENT_PAGE, LOGOUT } from '../../utils/actions'
-import { Box, Grid, Flex, Button, VStack, Text, Image } from '@chakra-ui/react'
+import { Box, Grid, Flex, VStack, Text } from '@chakra-ui/react'
 import StaffBioPopup from '../../components/StaffBioPopup'
 import AppointmentCard from '../../components/AppointmentCard'
 import VisitReasons from '../../components/VisitReasons'
 import CurrentContactDetails from '../../components/CurrentContactDetails'
 import NewClientQueries from '../../components/NewClientQuestions'
 import OcularHistory from '../../components/OcularHistory'
-import MedicalHistory from '../../components/MedicalHistory'
 import VisualNeeds from '../../components/VisualNeeds'
 
 const Profile = () => {
   const { state, dispatch } = useAppState()
   const userData = state.userData
   const optometrist = state.optometrist
+
   let optomName = ''
   if (optometrist) {
     optomName = `${optometrist.title} ${optometrist.firstName} ${optometrist.lastName}`
   }
-  const appointmentId = state.appointment.id
+  let appointmentId = null
+  if (state.appointment) {
+    appointmentId = state.appointment.id
+  }
+
   const newClientQuestions = state.newClientQuestions
 
-  console.log('appointmentId', appointmentId)
+  const pageElementStyle = {
+    border: '0px',
+    borderRadius: 'xl',
+    boxShadow: '2xl',
+    p: 4,
+    backgroundColor: 'panelBg.500',
+  }
 
   return (
     <Grid templateColumns={{ base: '1fr', lg: 'repeat(2, 1fr)' }} gap={6} p={4}>
-      <Box border="2px" borderRadius="md" boxShadow="2xl" p={4}>
+      <Box {...pageElementStyle}>
         <Flex direction={{ base: 'column', md: 'row' }}>
           {/* Left Sub-element */}
           <VStack
@@ -38,7 +47,7 @@ const Profile = () => {
             <AppointmentCard />
             {optometrist ? (
               <StaffBioPopup
-                imageUrl={optometrist.imageUrl}
+                imageURL={optometrist.imageURL}
                 name={optomName}
                 qualifications={optometrist.qualifications}
                 bio={optometrist.bio}
@@ -72,26 +81,28 @@ const Profile = () => {
           </Box>
         </Flex>
       </Box>
-      <Box border="2px" borderRadius="md" boxShadow="2xl" p={4}>
+      <Box {...pageElementStyle}>
         <CurrentContactDetails />
       </Box>
-      {userData.isNewClient && newClientQuestions ? (
-        <Box border="2px" borderRadius="md" boxShadow="2xl" p={4}>
+      {userData && userData.isNewClient && newClientQuestions ? (
+        <Box {...pageElementStyle}>
           <NewClientQueries />
         </Box>
       ) : (
         ''
       )}
-      <Box border="2px" borderRadius="md" boxShadow="2xl" p={4}>
-        <VisitReasons appointmentId={appointmentId} />
-      </Box>
-      <Box border="2px" borderRadius="md" boxShadow="2xl" p={4}>
-        <VisualNeeds />
-      </Box>
-      {/* <Box border="2px" borderRadius="md" boxShadow="2xl" p={4}>
+      <Box {...pageElementStyle}>
         <OcularHistory />
       </Box>
-      <Box border="2px" borderRadius="md" boxShadow="2xl" p={4}>
+      <Box {...pageElementStyle}>
+        <VisitReasons appointmentId={appointmentId} />
+      </Box>
+      <Box {...pageElementStyle}>
+        <VisualNeeds />
+      </Box>
+
+      {/* 
+      <Box  {...pageElementStyle}>
         <MedicalHistory />
       </Box> */}
     </Grid>

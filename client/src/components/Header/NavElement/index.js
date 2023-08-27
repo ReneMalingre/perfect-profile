@@ -11,12 +11,14 @@ function NavElement({ id, title, link, isSelected, onClick }) {
       textAlign="center"
       _hover={{
         textDecoration: 'none',
-        bg: 'spaceGray.500',
-        color: 'deepCyan.500',
+        bg: 'headerFooterText.500',
+        color: 'headerFooterSelectedText.500',
       }}
       link={link}
-      bg={isSelected ? 'spaceGray.500' : ''}
-      color={isSelected ? 'deepCyan.500' : 'spaceGray.500'}
+      bg={isSelected ? 'headerFooterText.500' : ''}
+      color={
+        isSelected ? 'headerFooterSelectedText.500' : 'headerFooterText.500'
+      }
       onClick={(event) => {
         event.preventDefault()
         onClick(id)

@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react'
-import { Box, Flex, Text, chakra, Link, Icon, Center } from '@chakra-ui/react'
+import { Box, Flex, Text, chakra, Center } from '@chakra-ui/react'
 import { useAppState } from '../../utils/AppContext'
 import RenderRow from '../RenderRow'
 
@@ -27,7 +27,7 @@ function MedicalHistory() {
         opacity="0"
         fontWeight="bold"
       >
-        Presbyopia (age-related near blur):&nbsp;&nbsp;
+        Presbyopia (age near blur):&nbsp;&nbsp;
       </chakra.div>
 
       <Center>

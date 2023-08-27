@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+
 require('dayjs/locale/en-au')
 dayjs.locale('en-au')
 var customParseFormat = require('dayjs/plugin/customParseFormat')
@@ -6,8 +7,6 @@ dayjs.extend(customParseFormat)
 
 // get a value from a nested object in a profile
 function getValueFromProfile(field, profile) {
-  // console.log('field', field)
-  // console.log('profile', profile)
   if (!field || !profile) {
     return null
   }
@@ -32,7 +31,6 @@ function setValueInProfile(field, value, profile) {
 }
 
 function validateUserData(userData) {
-  console.log('validateUserData', userData)
   if (!userData) {
     return false
   }
@@ -82,10 +80,8 @@ function convertDateStringToISO(dateString) {
 
     for (let format of formats) {
       if (dateString.length === format.length) {
-        // console.log('trying format', dateString, format)
         date = dayjs(dateString, format, 'en-au')
         if (date.isValid()) {
-          // console.log('date is valid', date)
           break
         }
       }

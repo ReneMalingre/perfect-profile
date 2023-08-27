@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Text, Flex, Input, Button, Textarea, Spacer } from '@chakra-ui/react'
+import { Text, Flex, Input, Button, Textarea } from '@chakra-ui/react'
 
 function RenderRow({
   label,
@@ -10,6 +10,7 @@ function RenderRow({
   validate,
   formatData,
   isTextArea = false,
+  inputPrompt,
 }) {
   const [isEditing, setIsEditing] = useState(false)
   const [localData, setLocalData] = useState(data || '') // local copy for editing
@@ -41,7 +42,7 @@ function RenderRow({
   const cancelButtonStyle = {
     fontWeight: 'normal',
     color: 'blue.50',
-    bgColor: 'blue.500',
+    bgColor: 'headerFooterBg.500',
     size: 'sm',
     _hover: { bgColor: 'blue.800' },
   }
@@ -79,7 +80,6 @@ function RenderRow({
         setIsEditing(false)
       } else {
         // If data is invalid, don't save it
-        console.log('invalid data', localData)
       }
     }
     setIsEditing(false)
@@ -95,8 +95,11 @@ function RenderRow({
   }
 
   return (
-    <Flex my={1} direction={isTextArea ? 'column' : 'row'}>
-      <Text as="strong" style={labelStyle} width={isTextArea ? '100%' : width}>
+    <Flex
+      my={1}
+      direction={isTextArea ? 'column' : isEditing ? 'column' : 'row'}
+    >
+      <Text as="strong" {...labelStyle} width={isTextArea ? '100%' : width}>
         {label}
       </Text>
       {isEditing ? (
@@ -116,6 +119,14 @@ function RenderRow({
               focusBorderColor={!isValid ? 'red.200' : 'green.200'}
               onKeyDown={handleInputKeyDown}
               mb={2}
+              placeholder={inputPrompt}
+              sx={{
+                '::placeholder': {
+                  color: 'gray.500',
+                  fontSize: 'xs',
+                },
+              }}
+              height={'4rem'}
             />
           ) : (
             <Input
@@ -126,6 +137,14 @@ function RenderRow({
               border={!isValid ? '1px solid red' : '1px solid green'}
               focusBorderColor={!isValid ? 'red.200' : 'green.200'}
               onKeyDown={handleInputKeyDown}
+              placeholder={inputPrompt}
+              sx={{
+                '::placeholder': {
+                  color: 'gray.500',
+                  fontSize: 'xs',
+                },
+              }}
+              height={'2rem'}
             />
           )}
           <Flex flex="0">

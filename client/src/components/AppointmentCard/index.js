@@ -8,12 +8,17 @@ function AppointmentCard() {
   const { state } = useAppState()
   const appointment = state.appointment
   const hasAppointment = appointment && appointment.id
+
   let googleMapsLink = ''
-  if (appointment && appointment.address) {
+  if (appointment && appointment.locationAddress) {
     googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-      appointment.address
+      appointment.locationAddress
     )}`
+  } else {
+    googleMapsLink =
+      'https://www.google.com/maps/search/?api=1&query=Adelaide+Eye+Care'
   }
+
   let bookingLink = 'https://www.adelaideeyecare.com.au/book-appointment'
   return (
     <Box borderWidth="1px" borderRadius="lg" p={4} boxShadow="md">
@@ -25,17 +30,17 @@ function AppointmentCard() {
       {hasAppointment ? (
         <>
           <Text mb={2}>
-            <strong>Date:</strong> {formatDate(appointment.date)}
+            <strong>Date:</strong> {formatDate(appointment.appointmentDate)}
           </Text>
 
           <Text mb={2}>
-            <strong>Time:</strong> {appointment.time}
+            <strong>Time:</strong> {appointment.appointmentTime}
           </Text>
 
           <Link
             href={googleMapsLink}
             isExternal
-            color="teal.500"
+            color="panelLightText.500"
             display="flex"
             alignItems="center"
           >
@@ -51,7 +56,7 @@ function AppointmentCard() {
           <Link
             href={bookingLink}
             isExternal
-            color="teal.500"
+            color="panelLightText.500"
             display="flex"
             alignItems="center"
           >

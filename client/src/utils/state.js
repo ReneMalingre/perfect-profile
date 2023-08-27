@@ -9,4 +9,5 @@ export const initialState = {
   visitReasons: [],
   newClientQuestions: null,
   visualNeeds: null,
+  pastOcularHistory: null,
 }

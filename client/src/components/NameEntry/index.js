@@ -65,10 +65,37 @@ function NameEntry({
   const cancelButtonStyle = {
     fontWeight: 'normal',
     color: 'blue.50',
-    bgColor: 'blue.500',
+    bgColor: 'headerFooterBg.500',
     size: 'sm',
     _hover: { bgColor: 'blue.800' },
   }
+  const inputStyle = {
+    height: '1.8rem',
+    backgroundColor: !isValid ? 'red.100' : 'green.50',
+    border: !isValid ? '1px solid red' : '1px solid green',
+    focusBorderColor: !isValid ? 'red.200' : 'green.200',
+    sx: {
+      '::placeholder': {
+        color: 'gray.500',
+        fontSize: 'xs',
+      },
+    },
+    mb: 1,
+  }
+  const inputStyleNotCompulsory = {
+    height: '1.8rem',
+    backgroundColor: 'green.50',
+    border: '1px solid green',
+    focusBorderColor: 'green.200',
+    sx: {
+      '::placeholder': {
+        color: 'gray.500',
+        fontSize: 'xs',
+      },
+    },
+    mb: 1,
+  }
+
   // user clicks the text to start editing
   const handleTextClick = () => {
     setInitialData(localData) // Capture the value when editing starts
@@ -77,8 +104,6 @@ function NameEntry({
 
   // user changes the input value so update local state
   const handleInputChange = (event, identifier) => {
-    console.log('NameEntry: handleInputChange', event.target.value)
-
     const value = event.target.value
     // copy the local data object
     const obj = { ...localData }
@@ -91,7 +116,6 @@ function NameEntry({
     }
 
     current[keys[keys.length - 1]] = value
-    console.log('NameEntry: handleInputChange', current)
     // set the single field value
     setLocalData(current)
   }
@@ -100,7 +124,6 @@ function NameEntry({
   const handleSave = () => {
     // Check if data has changed
     if (!deepEqual(localData, initialData)) {
-      console.log('NameEntry: data changed', localData)
       onDataChange(localData) // notify the parent of the change only if data changed
     }
     // reset the UI
@@ -115,7 +138,7 @@ function NameEntry({
 
   return (
     <Flex my={1}>
-      <Text as="strong" style={labelStyle} width={width}>
+      <Text as="strong" {...labelStyle} width={width}>
         {label}
       </Text>
       {isEditing ? (
@@ -124,37 +147,32 @@ function NameEntry({
             placeholder="Title"
             value={localData.title}
             onChange={(e) => handleInputChange(e, 'title')}
-            mb={1}
             ref={inputRef}
-            backgroundColor={'green.50'}
+            {...inputStyleNotCompulsory}
           />
           <Input
             placeholder="First Name"
             value={localData.firstName}
             onChange={(e) => handleInputChange(e, 'firstName')}
-            mb={1}
-            backgroundColor={!isValid ? 'red.100' : 'green.50'}
+            {...inputStyle}
           />
           <Input
             placeholder="Middle Name"
             value={localData.middleName}
             onChange={(e) => handleInputChange(e, 'middleName')}
-            mb={1}
-            backgroundColor={'green.50'}
+            {...inputStyleNotCompulsory}
           />
           <Input
             placeholder="Last Name"
             value={localData.lastName}
             onChange={(e) => handleInputChange(e, 'lastName')}
-            mb={1}
-            backgroundColor={!isValid ? 'red.100' : 'green.50'}
+            {...inputStyle}
           />
           <Input
             placeholder="Preferred First name"
             value={localData.preferredFirstName}
             onChange={(e) => handleInputChange(e, 'preferredFirstName')}
-            mb={1}
-            backgroundColor={'green.50'}
+            {...inputStyleNotCompulsory}
           />
           <Flex mb={1} direction="row" mt={1}>
             <Button

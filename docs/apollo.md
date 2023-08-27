@@ -82,7 +82,6 @@ function UpdateUserComponent() {
         }
       });
 
-      console.log("Updated user:", response.data.updateUser);
     } catch (err) {
       console.error("Error updating user:", err);
     }

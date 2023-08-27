@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import { useMutation, useQuery } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 
 import { LOGIN_USER } from '../utils/graphql/userMutations'
-import { GET_NEXT_APPOINTMENT } from '../utils/graphql/appointmentQueries'
 
 import Auth from '../utils/auth'
 import { useAppState } from '../utils/AppContext'
@@ -16,6 +15,7 @@ import {
   SET_VISIT_REASONS,
   SET_NEW_CLIENT_QUESTIONS,
   SET_VISUAL_NEEDS,
+  SET_PAST_OCULAR_HISTORY,
 } from '../utils/actions'
 import {
   Box,
@@ -109,6 +109,7 @@ const Login = (props) => {
           type: SET_NEW_CLIENT_QUESTIONS,
           payload: userNewClientQuestions,
         })
+        console.log('userNewClientQuestions: ', userNewClientQuestions)
 
         let userVisualNeeds = data.login.visualNeeds
         if (userVisualNeeds) {
@@ -116,10 +117,20 @@ const Login = (props) => {
             JSON.stringify(userVisualNeeds, omitTypename)
           )
         }
-        console.log('userVisualNeeds', userVisualNeeds)
         dispatch({
           type: SET_VISUAL_NEEDS,
           payload: userVisualNeeds,
+        })
+
+        let userPastOcularHistory = data.login.pastOcularHistory
+        if (userPastOcularHistory) {
+          userPastOcularHistory = JSON.parse(
+            JSON.stringify(userPastOcularHistory, omitTypename)
+          )
+        }
+        dispatch({
+          type: SET_PAST_OCULAR_HISTORY,
+          payload: userPastOcularHistory,
         })
 
         // Use AppContext to update currentPage
