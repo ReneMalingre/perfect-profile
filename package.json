@@ -14,7 +14,8 @@
     "lint": "npm run lint:client && npm run lint:server",
     "lint:client:fix": "eslint client/ --ext .js,.jsx --fix",
     "lint:server:fix": "eslint server/ --ext .js --fix",
-    "lint:fix": "npm run lint:client:fix && npm run lint:server:fix"
+    "lint:fix": "npm run lint:client:fix && npm run lint:server:fix",
+    "heroku-postbuild": "npm run install && npm run build"
   },
   "keywords": [],
   "author": "Rene Malingre",
