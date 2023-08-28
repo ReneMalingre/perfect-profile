@@ -107,7 +107,6 @@ export const reducer = (state, action) => {
         pastOcularHistory: action.payload,
       }
     default:
-      console.log('Unknown action: ' + action.type)
       return state
   }
 }

@@ -150,13 +150,16 @@ function VisualNeeds() {
       </chakra.div>
 
       <Center>
-        <Text fontSize="xl" fontWeight="bold" mb={2}>
+        <Text fontSize="xl" fontWeight="bold" mb={2} color="panelLightText.500">
           Your Visual Needs
         </Text>
       </Center>
-      <Text mb={1}>
-        Knowing your needs helps us to advise you on the best vision solutions.
-      </Text>
+      <Center>
+        <Text mb={1} color="panelHeading.500">
+          Knowing your needs helps us to advise you on the best vision
+          solutions.
+        </Text>
+      </Center>
       <Flex direction="column">
         <QuestionnaireSubHeading heading="Your Occupational Vision Needs:" />
         <RenderRow
@@ -319,6 +322,7 @@ function VisualNeeds() {
             ...renderLabelStyle,
             fontWeight: 'bold',
             fontSize: 'md',
+            color: 'panelLightText.500',
           }}
           isTextArea={true}
           inputPrompt="Please enter any other information about your vision needs you think will be helpful to us to help you."

@@ -23,7 +23,7 @@ function AppointmentCard() {
   return (
     <Box borderWidth="1px" borderRadius="lg" p={4} boxShadow="md">
       <Center>
-        <Text fontSize="xl" fontWeight="bold" mb={2}>
+        <Text fontSize="xl" fontWeight="bold" mb={2} color="contrastText.500">
           Your Appointment
         </Text>
       </Center>

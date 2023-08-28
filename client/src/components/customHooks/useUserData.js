@@ -25,11 +25,22 @@ export function useUserData() {
   const [loading, setLoading] = useState(false)
 
   const fetchUserData = async () => {
-    setLoading(true)
-    if (Auth.loggedIn()) {
+    // check for data in state
+    const hasStateData =
+      !!state.profile &&
+      !!state.userData &&
+      !!state.visualNeeds &&
+      !!state.pastOcularHistory
+    const isLoggedIn = Auth.loggedIn()
+    // if no data in state and user is logged in, fetch data
+    if (isLoggedIn && hasStateData) {
+      // both login and state are true, so don't need to fetch data
+      return true
+    } else if (isLoggedIn && !hasStateData) {
+      // login is true but state is false, so fetch data
+      setLoading(true)
       try {
         const { data } = await loadUser()
-        console.log('Login Data Returned: ', data)
 
         // Check if data and token exist before proceeding
         if (data && data.getLoginInfo && data.getLoginInfo.token) {
@@ -45,7 +56,6 @@ export function useUserData() {
           let user = data.getLoginInfo.user
 
           user = JSON.parse(JSON.stringify(user, omitTypename))
-          console.log('user from login: ', user)
           if (user) {
             dispatch({ type: SET_USER_DATA, payload: user })
           }
@@ -87,7 +97,6 @@ export function useUserData() {
             type: SET_NEW_CLIENT_QUESTIONS,
             payload: userNewClientQuestions,
           })
-          console.log('userNewClientQuestions: ', userNewClientQuestions)
 
           let userVisualNeeds = data.getLoginInfo.visualNeeds
           if (userVisualNeeds) {
@@ -125,6 +134,7 @@ export function useUserData() {
         setLoading(false)
       }
     }
+    // if user is not logged in, return false
     return false
   }
 

@@ -165,13 +165,13 @@ function NewClientQueries() {
         How would you like them improved?&nbsp;&nbsp;
       </chakra.div>
       <Center>
-        <Text fontSize="xl" fontWeight="bold" mb={4}>
+        <Text fontSize="xl" fontWeight="bold" mb={4} color="panelLightText.500">
           Questions for New Clients
         </Text>
       </Center>
       <Stack spacing={4}>
         <FormControl>
-          <FormLabel fontWeight="bold">
+          <FormLabel fontWeight="bold" color="panelLightText.500">
             Why did you choose Adelaide Eye Care?
           </FormLabel>
           <Select
@@ -203,7 +203,7 @@ function NewClientQueries() {
         </FormControl>
 
         <FormControl>
-          <FormLabel fontWeight="bold">
+          <FormLabel fontWeight="bold" color="panelLightText.500">
             Is this your First Eye Examination?
           </FormLabel>
           <RadioGroup
@@ -239,7 +239,7 @@ function NewClientQueries() {
         </FormControl>
 
         <FormControl>
-          <FormLabel fontWeight="bold">
+          <FormLabel fontWeight="bold" color="panelLightText.500">
             Do you currently wear spectacles?
           </FormLabel>
           <RadioGroup
@@ -286,7 +286,7 @@ function NewClientQueries() {
         </FormControl>
 
         <FormControl>
-          <FormLabel fontWeight="bold">
+          <FormLabel fontWeight="bold" color="panelLightText.500">
             Do currently wear or have you worn contact lenses?
           </FormLabel>
           <RadioGroup
@@ -352,6 +352,7 @@ function NewClientQueries() {
               ...renderLabelStyle,
               fontWeight: 'bold',
               fontSize: 'md',
+              color: 'panelLightText.500',
             }}
             validate={validateTextEntry}
             isTextArea={true}

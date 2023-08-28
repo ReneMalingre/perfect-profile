@@ -178,11 +178,11 @@ function CurrentContactDetails() {
       </chakra.div>
 
       <Center>
-        <Text fontSize="xl" fontWeight="bold" mb={2}>
+        <Text fontSize="xl" fontWeight="bold" mb={2} color="panelLightText.500">
           Your Contact and Personal Details
         </Text>
       </Center>
-      <Text mb={1}>
+      <Text mb={1} color="panelHeading.500">
         Please review your contact details below, and correct any errors or
         omissions:
       </Text>

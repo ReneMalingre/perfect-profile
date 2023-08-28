@@ -11,7 +11,7 @@ function FourOhFour() {
 
   return (
     <Center height="100vh" flexDirection="column" bg="gray.50">
-      <Box textAlign="center" p={4} boxShadow="xl" borderRadius="lg" bg="white">
+      <Box textAlign="center" p={4} boxShadow="xl" borderRadius="lg" bg="page">
         <Heading size="2xl" mb={4}>
           404
         </Heading>

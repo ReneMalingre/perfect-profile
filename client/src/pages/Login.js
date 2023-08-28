@@ -52,7 +52,6 @@ const Login = (props) => {
       const { data } = await login({
         variables: { ...formData },
       })
-      console.log('Login Data Returned: ', data)
       // Check if data and token exist before proceeding
       if (data && data.login && data.login.token) {
         Auth.login(data.login.token)
@@ -67,7 +66,6 @@ const Login = (props) => {
         let user = data.login.user
 
         user = JSON.parse(JSON.stringify(user, omitTypename))
-        console.log('user from login: ', user)
         if (user) {
           dispatch({ type: SET_USER_DATA, payload: user })
         }
@@ -109,7 +107,6 @@ const Login = (props) => {
           type: SET_NEW_CLIENT_QUESTIONS,
           payload: userNewClientQuestions,
         })
-        console.log('userNewClientQuestions: ', userNewClientQuestions)
 
         let userVisualNeeds = data.login.visualNeeds
         if (userVisualNeeds) {
@@ -152,8 +149,15 @@ const Login = (props) => {
     }))
   }
 
+  const pageElementStyle = {
+    border: '0px',
+    borderRadius: 'xl',
+    boxShadow: '2xl',
+    p: 4,
+    backgroundColor: 'panelBg.500',
+  }
   return (
-    <Box width="400px" margin="auto" marginTop="100px">
+    <Box width="400px" margin="auto" marginTop="100px" {...pageElementStyle}>
       <form onSubmit={handleSubmit}>
         <VStack spacing={4}>
           <FormControl id="email" isRequired>
@@ -178,7 +182,13 @@ const Login = (props) => {
             />
           </FormControl>
           {loginError && <p style={{ color: 'red' }}>{loginError}</p>}
-          <Button mt={4} colorScheme="teal" type="submit">
+          <Button
+            mt={4}
+            bgColor="panelHeading.500"
+            color="pageBg.500"
+            fontWeight="normal"
+            type="submit"
+          >
             Login
           </Button>
         </VStack>

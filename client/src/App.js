@@ -66,7 +66,7 @@ const theme = extendTheme({
   },
   colors: {
     // Header and Footer
-    headerFooterText: { 500: '#FFFFFF' },
+    headerFooterText: { 500: '#F4F5F7' },
     headerFooterSelectedText: { 500: '#1A365D' }, // Dark blue for selected text
     headerFooterBg: { 500: '#23395D' }, // Dark navy blue background
 

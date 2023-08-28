@@ -112,23 +112,29 @@ function VisitReason({ appointmentId }) {
       }
       const reasonList = [...reasons, newReason]
       setReasons(reasonList) // set the local state
-      updateStateAndSaveToDatabase(reasonList)
+      updateStateAndSaveToDatabase(reasonList, '', true) // update the state and save to the database
     }
   }
 
   const handleSave = () => {
     const sanitisedText = sanitise(currentText)
+    if (sanitisedText.length === 0) {
+      return
+    }
     let reasonsList = []
     if (selectedReasonIndex !== null) {
-      // Update
+      // Update if the reason is different
       reasonsList = [...reasons]
-      reasonsList[selectedReasonIndex].reason = sanitisedText
-      setReasons(reasonsList)
-      setSelectedReasonIndex(null)
+      if (!(reasonsList[selectedReasonIndex].reason === sanitisedText)) {
+        reasonsList[selectedReasonIndex].reason = sanitisedText
+        setReasons(reasonsList)
+        setSelectedReasonIndex(null)
+
+        updateStateAndSaveToDatabase(reasonsList, '', true)
+      }
       // close the modal if it is open
       onClose()
       setCurrentText('')
-      updateStateAndSaveToDatabase(reasonsList)
     } else {
       // Add
       reasonsList = handleAdd(sanitisedText)
@@ -158,11 +164,15 @@ function VisitReason({ appointmentId }) {
       // close the modal if it is open
       onClose()
       // update the state and save to the database
-      updateStateAndSaveToDatabase(reasonList, deletedReasonId)
+      updateStateAndSaveToDatabase(reasonList, deletedReasonId, false)
     }
   }
 
-  async function updateStateAndSaveToDatabase(reasonsList, deletedReasonId) {
+  async function updateStateAndSaveToDatabase(
+    reasonsList,
+    deletedReasonId,
+    pushToDatabase
+  ) {
     // now set state
     dispatch({ type: SET_VISIT_REASONS, payload: reasonsList })
     // add the deleted reason id to the array and ensure it only contains valid ids
@@ -171,11 +181,13 @@ function VisitReason({ appointmentId }) {
     )
 
     // now save to database
-    if (
+    const okToSave =
+      pushToDatabase ||
       !lastSavedData ||
-      deletedReasonIds.length > 0 ||
+      itemsToDelete.length > 0 ||
       !arraysOfObjectsAreEqual(reasonsList, lastSavedData)
-    ) {
+
+    if (okToSave) {
       // ensure that the data is in the correct format and has the appointmentId
       let savedList = [...reasonsList]
       savedList = savedList.map((reason) => {
@@ -232,7 +244,12 @@ function VisitReason({ appointmentId }) {
     <Flex direction="column" height="100%">
       <Box>
         <Center>
-          <Text fontSize="xl" fontWeight="bold" mb={2}>
+          <Text
+            fontSize="xl"
+            fontWeight="bold"
+            mb={2}
+            color="panelLightText.500"
+          >
             What can we help you with during your visit?
           </Text>
         </Center>

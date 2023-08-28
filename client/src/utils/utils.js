@@ -145,8 +145,10 @@ function deepEqual(objA, objB) {
   return true
 }
 function arraysOfObjectsAreEqual(arr1, arr2) {
-  if (arr1.length !== arr2.length) return false
+  if (!arr1) return false
+  if (!arr2) return false
 
+  if (arr1.length !== arr2.length) return false
   const sortedArr1 = arr1.map((item) => JSON.stringify(item)).sort()
   const sortedArr2 = arr2.map((item) => JSON.stringify(item)).sort()
 
@@ -155,6 +157,7 @@ function arraysOfObjectsAreEqual(arr1, arr2) {
   }
   return true
 }
+
 function getFullAddress(addressDetails) {
   const fullAddressParts = [
     addressDetails.street1,

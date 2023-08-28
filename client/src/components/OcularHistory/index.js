@@ -144,12 +144,12 @@ function PastOcularHistory() {
       </chakra.div>
 
       <Center>
-        <Text fontSize="xl" fontWeight="bold" mb={2}>
+        <Text fontSize="xl" fontWeight="bold" mb={2} color="panelLightText.500">
           Your Eye History
         </Text>
       </Center>
       <Center>
-        <Text>
+        <Text color="panelHeading.500">
           We can help your eyes and vision better if we know more about you.
         </Text>
       </Center>
@@ -267,6 +267,7 @@ function PastOcularHistory() {
             ...renderLabelStyle,
             fontWeight: 'bold',
             fontSize: 'md',
+            color: 'panelLightText.500',
           }}
           inputPrompt="eg prone to chalazia, eye allergies, had eye injuries, always wear sunnies when driving"
           isTextArea={true}

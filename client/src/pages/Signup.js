@@ -43,7 +43,6 @@ const Signup = () => {
       })
 
       if (data) {
-        console.log('User added successfully!')
         Auth.login(data.login.token)
 
         // Use AppContext to update currentPage

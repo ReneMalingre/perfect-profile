@@ -14,7 +14,9 @@ import {
 } from '@chakra-ui/react'
 import Auth from '../utils/auth'
 import { useUserData } from '../components/customHooks/useUserData'
+import frontPageImage from '../assets/images/landing-page-image.jpg'
 
+//src =  'https://aecwebresources.s3.ap-southeast-2.amazonaws.com/Bootcamp/images/landing-page-image.jpg'
 const HomePage = () => {
   // Access state and dispatch from AppContext
   const { state, dispatch } = useAppState()
@@ -22,8 +24,6 @@ const HomePage = () => {
   const imageMaxWidth = useBreakpointValue({ base: '100%', md: '75%' })
   const imageWidth = useBreakpointValue({ base: '100%', md: '75%' })
   const explanatoryTextWidth = useBreakpointValue({ base: '100%', md: '70%' })
-
-  console.log(state.isAuthenticated ? 'logged in' : 'not logged in')
 
   const handleLoginClick = () => {
     dispatch({ type: SET_CURRENT_PAGE, payload: 'login' })
@@ -91,7 +91,7 @@ const HomePage = () => {
         {/* Image */}
         <Box maxWidth={imageMaxWidth} width="full">
           <Image
-            src="https://aecwebresources.s3.ap-southeast-2.amazonaws.com/Bootcamp/images/landing-page-image.jpg"
+            src={frontPageImage}
             alt="Fun image of a woman making glasses with her fingers in front of her eyes"
             maxWidth={imageMaxWidth}
             width={imageWidth}
@@ -106,7 +106,7 @@ const HomePage = () => {
           <Button
             size="lg"
             bgColor="contrastText.500"
-            color="white"
+            color="pageBg.500"
             fontWeight="normal"
             mb={6}
             onClick={() => {
@@ -120,7 +120,7 @@ const HomePage = () => {
             <Button
               size="lg"
               bgColor="panelLightText.400"
-              color="white"
+              color="pageBg.500"
               fontWeight="normal"
               onClick={() => {
                 handleLoginClick()
@@ -131,7 +131,7 @@ const HomePage = () => {
             <Button
               size="lg"
               bgColor="panelLightText.800"
-              color="white"
+              color="pageBg.500"
               fontWeight="normal"
               onClick={() => {
                 handleRegisterClick()

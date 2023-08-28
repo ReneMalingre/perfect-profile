@@ -63,7 +63,11 @@ const resolvers = {
     },
 
     // Appointment Queries
-    appointmentsByUser: async (_, { userId }) => {
+    appointmentsByUser: async (_, { userId }, context) => {
+      if (!context.user) {
+        throw new Error('You must be authenticated to perform this action.')
+      }
+
       try {
         return await Appointment.find({ userId })
       } catch (error) {
@@ -72,7 +76,11 @@ const resolvers = {
         )
       }
     },
-    nextAppointment: async (_, { userId }) => {
+    nextAppointment: async (_, { userId }, context) => {
+      if (!context.user) {
+        throw new Error('You must be authenticated to perform this action.')
+      }
+
       const today = new Date()
       const currentTime = `${today.getHours() - 1}:${String(
         today.getMinutes()
@@ -102,7 +110,11 @@ const resolvers = {
     },
 
     // VisitReason Queries
-    visitReasonsByAppointment: async (_, { appointmentId }) => {
+    visitReasonsByAppointment: async (_, { appointmentId }, context) => {
+      if (!context.user) {
+        throw new Error('You must be authenticated to perform this action.')
+      }
+
       try {
         return await VisitReason.find({ appointmentId })
       } catch (error) {
@@ -113,14 +125,21 @@ const resolvers = {
     },
 
     // Optometrist Queries
-    getOptometrists: async () => {
+    getOptometrists: async (parent, args, context) => {
+      if (!context.user) {
+        throw new Error('You must be authenticated to perform this action.')
+      }
       try {
         return await Optometrist.find()
       } catch (error) {
         throw new Error(`Failed to fetch optometrists. Error: ${error.message}`)
       }
     },
-    getOptometrist: async (_, { id }) => {
+    getOptometrist: async (_, { id }, context) => {
+      if (!context.user) {
+        throw new Error('You must be authenticated to perform this action.')
+      }
+
       try {
         return await Optometrist.findById(id)
       } catch (error) {
@@ -129,7 +148,10 @@ const resolvers = {
         )
       }
     },
-    getNewClientQuestionsByUserId: async (_, { userId }) => {
+    getNewClientQuestionsByUserId: async (_, { userId }, context) => {
+      if (!context.user) {
+        throw new Error('You must be authenticated to perform this action.')
+      }
       try {
         let clientQuestions = await NewClientQuestions.findOne({ userId })
         if (!clientQuestions) {
@@ -141,7 +163,11 @@ const resolvers = {
         throw new Error(error.message)
       }
     },
-    getVisualNeedsByUserId: async (_, { userId }) => {
+    getVisualNeedsByUserId: async (_, { userId }, context) => {
+      if (!context.user) {
+        throw new Error('You must be authenticated to perform this action.')
+      }
+
       try {
         let visualNeeds = await VisualNeeds.findOne({ userId })
         if (!visualNeeds) {
@@ -153,7 +179,11 @@ const resolvers = {
         throw new Error(error.message)
       }
     },
-    getPastOcularHistoryByUserId: async (_, { userId }) => {
+    getPastOcularHistoryByUserId: async (_, { userId }, context) => {
+      if (!context.user) {
+        throw new Error('You must be authenticated to perform this action.')
+      }
+
       try {
         let pastOcularHistory = await PastOcularHistory.findOne({ userId })
         if (!pastOcularHistory) {
@@ -170,7 +200,6 @@ const resolvers = {
       let userData = null
       // console.log(context)
       if (context.user) {
-        console.log('context.user', context.user)
         try {
           userData = await User.findById({ _id: context.user._id })
         } catch (error) {
@@ -179,7 +208,6 @@ const resolvers = {
       } else {
         throw new AuthenticationError('Not logged in')
       }
-      console.log('userData', userData)
       // recreate the token
       const token = signToken({
         email: userData.contactDetails.email,
@@ -201,8 +229,6 @@ const resolvers = {
       ).padStart(2, '0')}` // get current time less one hour in HH:mm format
 
       try {
-        console.log('fetching next appointment')
-        console.log('userId', userData._id)
         const doc = await Appointment.findOne({
           userId: userData._id,
           $or: [
@@ -222,7 +248,6 @@ const resolvers = {
             .toISOString()
             .split('T')[0]
         }
-        console.log('next appointment', nextAppointment)
         if (nextAppointment) {
           try {
             appointmentOptometrist = await Optometrist.findById(
@@ -244,7 +269,6 @@ const resolvers = {
       }
 
       if (userData.isNewClient) {
-        console.log(userData._id)
 
         try {
           // this will create one if it doesn't exist
@@ -311,7 +335,10 @@ const resolvers = {
   },
 
   Mutation: {
-    addUser: async (parent, { username, email, password }) => {
+    addUser: async (parent, { username, email, password }, context) => {
+      if (!context.user) {
+        throw new Error('You must be authenticated to perform this action.')
+      }
       // do validation and ensure email is lowercase
       if (!email || !password) {
         throw new AuthenticationError(
@@ -371,15 +398,17 @@ const resolvers = {
         }
       }
     },
-    updateUsername: async (_, { input: { id, username } }) => {
-      console.log('updateUsername', id, username)
+    updateUsername: async (_, { input: { id, username } }, context) => {
+      if (!context.user) {
+        throw new Error('You must be authenticated to perform this action.')
+      }
+
 
       const user = await User.findByIdAndUpdate(id, { username }, { new: true })
 
       if (!user) {
         throw new Error(`Failed to update user with ID: ${id}`)
       }
-      console.log('updated user', user)
 
       return user
     },
@@ -402,7 +431,6 @@ const resolvers = {
       }
     },
     login: async (parent, { email, password }) => {
-      console.log('login', email, password)
       if (!email || !password) {
         throw new AuthenticationError(
           'You need to provide a valid email address and password'
@@ -441,8 +469,6 @@ const resolvers = {
         ).padStart(2, '0')}` // get current time less one hour in HH:mm format
 
         try {
-          console.log('fetching next appointment')
-          console.log('userId', userData._id)
           const doc = await Appointment.findOne({
             userId: userData._id,
             $or: [
@@ -462,7 +488,6 @@ const resolvers = {
               .toISOString()
               .split('T')[0]
           }
-          console.log('next appointment', nextAppointment)
           if (nextAppointment) {
             try {
               appointmentOptometrist = await Optometrist.findById(
@@ -484,7 +509,6 @@ const resolvers = {
         }
 
         if (userData.isNewClient) {
-          console.log(userData._id)
 
           try {
             // this will create one if it doesn't exist
@@ -557,8 +581,12 @@ const resolvers = {
     // Appointment Mutations
     addAppointment: async (
       _,
-      { userId, appointmentDate, appointmentTime, location, optometristId }
+      { userId, appointmentDate, appointmentTime, location, optometristId },
+      context
     ) => {
+      if (!context.user) {
+        throw new Error('You must be authenticated to perform this action.')
+      }
       const appointment = new Appointment({
         userId,
         appointmentDate,
@@ -569,7 +597,10 @@ const resolvers = {
       await appointment.save()
       return appointment
     },
-    updateAppointment: async (_, { input }) => {
+    updateAppointment: async (_, { input }, context) => {
+      if (!context.user) {
+        throw new Error('You must be authenticated to perform this action.')
+      }
       const { id, ...updateFields } = input
       const updatedAppointment = await Appointment.findByIdAndUpdate(
         id,
@@ -581,7 +612,10 @@ const resolvers = {
       }
       return updatedAppointment
     },
-    deleteAppointment: async (_, { id }) => {
+    deleteAppointment: async (_, { id }, context) => {
+      if (!context.user) {
+        throw new Error('You must be authenticated to perform this action.')
+      }
       const deletedAppointment = await Appointment.findByIdAndRemove(id)
       if (!deletedAppointment) {
         return {
@@ -593,12 +627,18 @@ const resolvers = {
     },
 
     // VisitReason Mutations
-    addVisitReason: async (_, { appointmentId, reason }) => {
+    addVisitReason: async (_, { appointmentId, reason }, context) => {
+      if (!context.user) {
+        throw new Error('You must be authenticated to perform this action.')
+      }
       const visitReason = new VisitReason({ appointmentId, reason })
       await visitReason.save()
       return visitReason
     },
-    updateVisitReason: async (_, { input }) => {
+    updateVisitReason: async (_, { input }, context) => {
+      if (!context.user) {
+        throw new Error('You must be authenticated to perform this action.')
+      }
       const { id, ...updateFields } = input
       const updatedVisitReason = await VisitReason.findByIdAndUpdate(
         id,
@@ -610,7 +650,10 @@ const resolvers = {
       }
       return updatedVisitReason
     },
-    deleteVisitReason: async (_, { id }) => {
+    deleteVisitReason: async (_, { id }, context) => {
+      if (!context.user) {
+        throw new Error('You must be authenticated to perform this action.')
+      }
       const deletedVisitReason = await VisitReason.findByIdAndRemove(id)
       if (!deletedVisitReason) {
         return {
@@ -623,8 +666,13 @@ const resolvers = {
     // this is a bit complicated because we need to update, insert and delete
     updateVisitReasons: async (
       _,
-      { appointmentId, visitReasons, deletedReasonIds }
+      { appointmentId, visitReasons, deletedReasonIds },
+      context
     ) => {
+      if (!context.user) {
+        throw new Error('You must be authenticated to perform this action.')
+      }
+
       try {
         // Separate VisitReasons by those with an ID (existing) and those without (new)
         const existingReasons = visitReasons.filter(
@@ -653,7 +701,6 @@ const resolvers = {
         )
 
         // Delete reasons based on provided IDs
-        console.log('deletedReasonIds', deletedReasonIds)
         await VisitReason.deleteMany({ _id: { $in: deletedReasonIds } })
 
         return [...existingReasons, ...insertedReasons] // or whatever response structure you prefer
@@ -663,16 +710,25 @@ const resolvers = {
       }
     },
     // Optometrist Mutations
-    addOptometrist: async (_, { input }) => {
+    addOptometrist: async (_, { input }, context) => {
+      if (!context.user) {
+        throw new Error('You must be authenticated to perform this action.')
+      }
       const optometrist = new Optometrist(input)
       return await optometrist.save()
     },
 
-    updateOptometrist: async (_, { id, input }) => {
+    updateOptometrist: async (_, { id, input }, context) => {
+      if (!context.user) {
+        throw new Error('You must be authenticated to perform this action.')
+      }
       return await Optometrist.findByIdAndUpdate(id, input, { new: true })
     },
 
-    deleteOptometrist: async (_, { id }) => {
+    deleteOptometrist: async (_, { id }, context) => {
+      if (!context.user) {
+        throw new Error('You must be authenticated to perform this action.')
+      }
       const deletedOptometrist = await Optometrist.findByIdAndDelete(id)
       if (!deletedOptometrist) {
         return {
@@ -685,7 +741,10 @@ const resolvers = {
         message: 'Optometrist successfully deleted.',
       }
     },
-    addNewClientQuestions: async (_, { input }) => {
+    addNewClientQuestions: async (_, { input }, context) => {
+      if (!context.user) {
+        throw new Error('You must be authenticated to perform this action.')
+      }
       try {
         // Before saving, it's a good idea to check if there's already a record with the same userId.
         const existingQuestions = await NewClientQuestions.findOne({
@@ -711,7 +770,10 @@ const resolvers = {
         )
       }
     },
-    updateNewClientQuestionsByUserId: async (_, { userId, input }) => {
+    updateNewClientQuestionsByUserId: async (_, { userId, input }, context) => {
+      if (!context.user) {
+        throw new Error('You must be authenticated to perform this action.')
+      }
       try {
         const updatedQuestions = await NewClientQuestions.findOneAndUpdate(
           { userId },
@@ -728,7 +790,11 @@ const resolvers = {
         )
       }
     },
-    deleteNewClientQuestionsByUserId: async (_, { userId }) => {
+    deleteNewClientQuestionsByUserId: async (_, { userId }, context) => {
+      if (!context.user) {
+        throw new Error('You must be authenticated to perform this action.')
+      }
+
       try {
         const result = await NewClientQuestions.findOneAndDelete({ userId })
         if (!result) {
@@ -748,7 +814,10 @@ const resolvers = {
         }
       }
     },
-    upsertVisualNeeds: async (_, { userId, input }) => {
+    upsertVisualNeeds: async (_, { userId, input }, context) => {
+      if (!context.user) {
+        throw new Error('You must be authenticated to perform this action.')
+      }
       try {
         const updatedVisualNeeds = await VisualNeeds.findOneAndUpdate(
           { userId },
@@ -760,7 +829,10 @@ const resolvers = {
         throw new Error(error)
       }
     },
-    upsertPastOcularHistory: async (_, { userId, input }) => {
+    upsertPastOcularHistory: async (_, { userId, input }, context) => {
+      if (!context.user) {
+        throw new Error('You must be authenticated to perform this action.')
+      }
       try {
         const pastOcularHistory = await PastOcularHistory.findOneAndUpdate(
           { userId },

@@ -59,10 +59,15 @@ const Profile = () => {
 
           {/* Right Sub-element */}
           <Box flex={1}>
-            <Text fontSize="xl" fontWeight="bold" mb={2}>
+            <Text
+              fontSize="xl"
+              fontWeight="bold"
+              mb={2}
+              color="panelLightText.500"
+            >
               Some Information
             </Text>
-            <Text fontWeight="bold">
+            <Text fontWeight="bold" color="panelLightText.500">
               We are so grateful that you have chosen us to look after your eye
               health and vision needs. We will do our best to look after you and
               to answer any of your concerns or questions.

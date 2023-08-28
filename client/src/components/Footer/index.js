@@ -22,7 +22,7 @@ const Footer = () => {
       align="center"
       justifyContent="center"
       bg="headerFooterBg.500"
-      color="white"
+      color="pageBg.500"
     >
       <Flex
         direction={isMdUp ? 'row' : 'column'}
