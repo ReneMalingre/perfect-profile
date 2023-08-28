@@ -1,12 +1,157 @@
-[
-  {
-    "username": "Brian Kernighan",
-    "email": "bkernighan@techfriends.dev",
-    "password": "password01"
-  },
-  {
-    "username": "Donald Knuth",
-    "email": "dknuth@techfriends.dev",
-    "password": "password09"
-  }
-]
+{
+  "users": [
+    {
+      "username": "john_doe",
+      "password": "password123",
+      "nameDetails": {
+        "title": "Mr.",
+        "firstName": "John",
+        "lastName": "Doe"
+      },
+      "contactDetails": {
+        "phone": "0412345678",
+        "address": {
+          "street1": "123 Sydney St",
+          "city": "Sydney",
+          "state": "NSW",
+          "postalCode": "2000",
+          "country": "Australia"
+        },
+        "email": "john.doe@example.com"
+      },
+      "dateOfBirth": "1990-05-14",
+      "healthProfessionals": {
+        "gp": "Dr Emma Watson",
+        "gpAddress": "456 Bondi Road, Sydney",
+        "ophthalmologist": "Dr Robert Downey",
+        "ophthalmologistAddress": "789 Circular Quay, Sydney"
+      }
+    },
+    {
+      "username": "emma_jones",
+      "password": "emmaPass",
+      "nameDetails": {
+        "title": "Ms.",
+        "firstName": "Emma",
+        "lastName": "Jones"
+      },
+      "contactDetails": {
+        "phone": "0423456789",
+        "address": {
+          "street1": "234 Melbourne Ave",
+          "city": "Melbourne",
+          "state": "VIC",
+          "postalCode": "3000",
+          "country": "Australia"
+        },
+        "email": "emma.jones@example.com"
+      },
+      "dateOfBirth": "1985-11-20",
+      "healthProfessionals": {
+        "gp": "Dr Chris Evans",
+        "gpAddress": "1010 Victoria Street, Melbourne",
+        "ophthalmologist": "Dr Scarlett Johansson",
+        "ophthalmologistAddress": "1122 Flinders Lane, Melbourne"
+      }
+    },
+    {
+      "username": "liam_smith",
+      "password": "liamPass",
+      "nameDetails": {
+        "title": "Mr.",
+        "firstName": "Liam",
+        "lastName": "Smith"
+      },
+      "contactDetails": {
+        "phone": "0434567890",
+        "address": {
+          "street1": "345 Brisbane Blvd",
+          "city": "Brisbane",
+          "state": "QLD",
+          "postalCode": "4000",
+          "country": "Australia"
+        },
+        "email": "liam.smith@example.com"
+      },
+      "dateOfBirth": "1992-04-03",
+      "healthProfessionals": {
+        "gp": "Dr Mark Ruffalo",
+        "gpAddress": "1313 George Street, Brisbane",
+        "ophthalmologist": "Dr Brie Larson",
+        "ophthalmologistAddress": "1414 Adelaide Street, Brisbane"
+      }
+    },
+    {
+      "username": "ava_white",
+      "password": "avaPass",
+      "nameDetails": {
+        "title": "Miss",
+        "firstName": "Ava",
+        "lastName": "White"
+      },
+      "contactDetails": {
+        "phone": "0445678901",
+        "address": {
+          "street1": "456 Adelaide Alcove",
+          "city": "Adelaide",
+          "state": "SA",
+          "postalCode": "5000",
+          "country": "Australia"
+        },
+        "email": "ava.white@example.com"
+      },
+      "dateOfBirth": "1995-08-28",
+      "healthProfessionals": {
+        "gp": "Dr Jeremy Renner",
+        "gpAddress": "1717 Rundle Mall, Adelaide",
+        "ophthalmologist": "Dr Elizabeth Olsen",
+        "ophthalmologistAddress": "1818 King William Street, Adelaide"
+      }
+    },
+    {
+      "username": "noah_brown",
+      "password": "noahPass",
+      "nameDetails": {
+        "title": "Mr.",
+        "firstName": "Noah",
+        "lastName": "Brown"
+      },
+      "contactDetails": {
+        "phone": "0456789012",
+        "address": {
+          "street1": "567 Perth Place",
+          "city": "Perth",
+          "state": "WA",
+          "postalCode": "6000",
+          "country": "Australia"
+        },
+        "email": "noah.brown@example.com"
+      },
+      "dateOfBirth": "1988-02-15",
+      "healthProfessionals": {
+        "gp": "Dr Paul Rudd",
+        "gpAddress": "2020 Hay Street, Perth",
+        "ophthalmologist": "Dr Don Cheadle",
+        "ophthalmologistAddress": "2121 St Georges Terrace, Perth"
+      }
+    }
+  ],
+  "optometrists": [
+    {
+      "title": "Dr",
+      "firstName": "Rebekah",
+      "lastName": "Hopps",
+      "qualifications": "BMedSc(VisSc), MOpt, CertOcTher",
+      "bio": "Rebekah graduated as the top student of her year of the Masters in Optometry degree from Flinders University. She has exceptional and uncommon experience as an optometrist, which has driven her passion towards helping people with ocular surface disease, glaucoma and contact lenses. After graduation she initially worked at a commercial practice, and for the next 4 or 5 years she consulted at an ophthalmology practice where she triaged and helped manage pre- and post-operative eye surgery patients . She prides herself in providing high quality patient-centred care and is passionate about making sure every patient understands their ocular condition and the process of treatment. When she’s not working, Rebekah spends her leisure time practicing classical ballet at her local dance studio and keeping company with her budgie, Chip.",
+      "imageURL": "https://aecwebresources.s3.ap-southeast-2.amazonaws.com/Bootcamp/optometrists/bek-hopps.jpg"
+    },
+    {
+      "title": "Mr",
+      "firstName": "René",
+      "lastName": "Malingré",
+      "qualifications": "BAppSc(Optom)(Hon)",
+      "bio": "Rene Malingre is the practice owner and managing director at Adelaide Eye Care. He and his wife, Elizabeth Capper, have owned Adelaide Eye Care since 2003, and have proudly grown the practice from a two-optometrist practice to a team of eight optometrists and a great crew of frame and lens experts. Rene has over 30 years of experience across private and corporate practice. He graduated at the top of his year from QUT and has had a main clinical focus on helping people with complex eye problems. Contact lenses and Myopia Control are his big passions at work, along with continuing to build and develop Adelaide Eye Care as a leading private independent optometry practice. Rene loves spending time with Liz and his teenage daughter Lauren. He enjoys getting fit, and getting unfit, in equal measure. ",
+      "imageURL": "https://aecwebresources.s3.ap-southeast-2.amazonaws.com/Bootcamp/optometrists/rene-malingre.jpg"
+    }
+  ]
+}

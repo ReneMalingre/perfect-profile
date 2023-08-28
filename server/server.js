@@ -1,14 +1,18 @@
 const express = require('express')
+// const helmet = require('helmet')
 const path = require('path')
 const { ApolloServer } = require('apollo-server-express')
 const { authMiddleware } = require('./utils/auth')
 require('dotenv').config()
 const { typeDefs, resolvers } = require('./schemas')
-
+const cors = require('cors')
 const db = require('./config/connection')
 
 const PORT = process.env.PORT || 3001
 const app = express()
+app.use(cors())
+// app.use(helmet())
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
@@ -29,7 +33,7 @@ app.get('/', (req, res) => {
 // Create a new instance of an Apollo server with the GraphQL schema
 const startApolloServer = async () => {
   await server.start()
-  server.applyMiddleware({ app })
+  server.applyMiddleware({ app, path: '/graphql' })
 
   db.once('open', () => {
     app.listen(PORT, () => {

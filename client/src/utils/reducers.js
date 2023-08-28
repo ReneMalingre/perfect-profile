@@ -1,25 +1,112 @@
-// import { useReducer } from 'react'
-// import { UPDATE_ACCOUNT_STATUS, UPDATE_ACCOUNT_NAME } from './actions'
+import {
+  SET_CURRENT_PAGE,
+  LOGIN,
+  LOGOUT,
+  SET_PROFILE,
+  SET_USER_DATA,
+  SET_USER_SINGLE_VALUE,
+  SET_USER_NAME_DATA,
+  SET_USER_ADDRESS_DATA,
+  SET_APPOINTMENT,
+  SET_OPTOMETRIST,
+  SET_VISIT_REASONS,
+  SET_NEW_CLIENT_QUESTIONS,
+  SET_VISUAL_NEEDS,
+  SET_PAST_OCULAR_HISTORY,
+} from './actions' // import action type
 
-// export const reducer = (state, action) => {
-//   switch (action.type) {
-//     case UPDATE_ACCOUNT_STATUS:
-//       console.log('UPDATE_ACCOUNT_STATUS dispatched')
-//       return {
-//         ...state,
-//         isLoggedIn: !action.isLoggedIn,
-//       }
-//     case UPDATE_ACCOUNT_NAME:
-//       console.log('UPDATE_ACCOUNT_NAME dispatched')
-//       return {
-//         ...state,
-//         userName: action.userName,
-//       }
-//     default:
-//       return state
-//   }
-// }
+import { setNestedObjectValue } from './utils'
 
-// export function useAccountReducer(initialState) {
-//   return useReducer(reducer, initialState)
-// }
+export const reducer = (state, action) => {
+  switch (action.type) {
+    case SET_CURRENT_PAGE:
+      return {
+        ...state,
+        currentPage: action.payload,
+      }
+    case LOGIN:
+      return {
+        ...state,
+        isAuthenticated: true,
+      }
+    case LOGOUT:
+      return {
+        ...state,
+        isAuthenticated: false,
+      }
+    case SET_PROFILE:
+      return {
+        ...state,
+        userProfile: action.payload,
+      }
+    case SET_USER_DATA:
+      if (!action.payload) {
+        return state
+      }
+      const returnedState = {
+        ...state,
+        userData: action.payload,
+      }
+      return returnedState
+    case SET_USER_SINGLE_VALUE:
+      // Create a deep copy of state.userData
+      const updatedData = JSON.parse(JSON.stringify(state.userData))
+
+      // Update the nested property using the utility function
+      setNestedObjectValue(updatedData, action.rowId, action.newData)
+
+      return { ...state, userData: updatedData }
+
+    case SET_USER_NAME_DATA:
+      return {
+        ...state,
+        userData: {
+          ...state.userData,
+          nameDetails: action.payload,
+        },
+      }
+    case SET_USER_ADDRESS_DATA:
+      return {
+        ...state,
+        userData: {
+          ...state.userData,
+          contactDetails: {
+            ...state.userData.contactDetails,
+            address: action.payload,
+          },
+        },
+      }
+    case SET_APPOINTMENT:
+      return {
+        ...state,
+        appointment: action.payload,
+      }
+    case SET_OPTOMETRIST:
+      return {
+        ...state,
+        optometrist: action.payload,
+      }
+    case SET_VISIT_REASONS:
+      return {
+        ...state,
+        visitReasons: action.payload,
+      }
+    case SET_NEW_CLIENT_QUESTIONS:
+      return {
+        ...state,
+        newClientQuestions: action.payload,
+      }
+    case SET_VISUAL_NEEDS:
+      return {
+        ...state,
+        visualNeeds: action.payload,
+      }
+    case SET_PAST_OCULAR_HISTORY:
+      return {
+        ...state,
+        pastOcularHistory: action.payload,
+      }
+    default:
+      return state
+  }
+}
