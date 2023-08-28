@@ -37,6 +37,9 @@ function AppointmentCard() {
             <strong>Time:</strong> {appointment.appointmentTime}
           </Text>
 
+          <Text mb={2}>
+            <strong>Phone:</strong> {appointment.locationTelephone}
+          </Text>
           <Link
             href={googleMapsLink}
             isExternal

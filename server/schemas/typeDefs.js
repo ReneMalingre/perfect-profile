@@ -77,6 +77,7 @@ const typeDefs = gql`
     appointmentTime: String!
     location: String!
     locationAddress: String!
+    locationTelephone: String
     optometristId: ID!
   }
 
@@ -149,6 +150,7 @@ const typeDefs = gql`
     appointmentTime: String!
     location: String
     locationAddress: String
+    locationTelephone: String
     optometristId: ID!
   }
 
@@ -360,6 +362,7 @@ const typeDefs = gql`
       appointmentTime: String!
       location: String!
       locationAddress: String!
+      locationTelephone: String
       optometristId: ID!
     ): Appointment!
     updateAppointment(input: AppointmentInput!): Appointment!

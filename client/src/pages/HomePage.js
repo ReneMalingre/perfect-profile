@@ -79,8 +79,8 @@ const HomePage = () => {
           </Center>
           <Center>
             <Text maxWidth={explanatoryTextWidth}>
-              Your information helps us personalise your eye care experience at
-              Adelaide Eye Care. The better we know you and your eyes, the
+              Your information helps us to personalise your eye care experience
+              at Adelaide Eye Care. The better we know you and your eyes, the
               better we can protect your eyes for life, and perfect your vision
               by recommending you the best optical solutions.
             </Text>

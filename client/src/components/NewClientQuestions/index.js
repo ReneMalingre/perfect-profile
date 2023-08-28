@@ -183,8 +183,11 @@ function NewClientQueries() {
           >
             <option value="">Select an option</option>
             <option value="advertisement">Advertisement</option>
-            <option value="professional">Health Professional</option>
-            <option value="friend">Friend/Family</option>
+            <option value="professional">Health Professional referral</option>
+            <option value="friend">Friend/Family recommended</option>
+            <option value="location">Convenient location</option>
+            <option value="directory">Online directory</option>
+            <option value="search">Search engine</option>
             <option value="other">Other</option>
           </Select>
           {(state.newClientQuestions.reasonForChoosing === 'professional' ||

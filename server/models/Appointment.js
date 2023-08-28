@@ -23,6 +23,10 @@ const appointmentSchema = new Schema({
     type: String,
     required: true,
   },
+  locationTelephone: {
+    type: String,
+    required: false,
+  },
   optometristId: {
     type: Schema.Types.ObjectId,
     ref: 'Optometrist',

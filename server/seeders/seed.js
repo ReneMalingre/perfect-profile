@@ -28,11 +28,13 @@ db.once('open', async () => {
         {
           name: 'Westbourne Park',
           address: '415 Goodwood Road, Westbourne Park, SA 5041, Australia',
+          telephone: '08 8373 2200',
         },
         {
           name: 'Mawson Lakes',
           address:
             'Shop 10A, 1-7 Main Street, Mawson Lakes, SA 5095, Australia',
+          telephone: '08 8359 1993',
         },
       ]
 

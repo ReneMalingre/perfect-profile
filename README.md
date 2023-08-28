@@ -30,7 +30,6 @@ It is built on the MERN stack, and uses Chakra UI for the front-end, and uses Ap
 - [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) - Programming language
 - [Node.js](https://nodejs.org/en/) - JavaScript runtime environment
 - [Express.js](https://expressjs.com/) - Node.js web server application framework
-- [Node.js](https://nodejs.org/en/) - JavaScript runtime environment
 - [React](https://reactjs.org/) - JavaScript library for building user interfaces
 - [MongoDB](https://www.mongodb.com/) - NoSQL database
 - [Mongoose](https://mongoosejs.com/) - MongoDB object modeling for Node.js
@@ -39,7 +38,6 @@ It is built on the MERN stack, and uses Chakra UI for the front-end, and uses Ap
 - [Apollo Client](https://www.apollographql.com/docs/react/) - GraphQL client
 - [JWT](https://jwt.io/) - JSON Web Tokens for authentication
 - [Bcrypt](https://www.npmjs.com/package/bcrypt) - Password hashing
-- [Bootstrap](https://getbootstrap.com/) - CSS framework
 - [Heroku](https://www.heroku.com/) - Hosting for the live application
 - [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) - Cloud database service
 - [AWS S3](https://aws.amazon.com/s3/) - Cloud storage service

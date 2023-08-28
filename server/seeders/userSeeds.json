@@ -139,11 +139,11 @@
   "optometrists": [
     {
       "title": "Dr",
-      "firstName": "Rebekah",
-      "lastName": "Hopps",
+      "firstName": "Claire",
+      "lastName": "Rendall",
       "qualifications": "BMedSc(VisSc), MOpt, CertOcTher",
-      "bio": "Rebekah graduated as the top student of her year of the Masters in Optometry degree from Flinders University. She has exceptional and uncommon experience as an optometrist, which has driven her passion towards helping people with ocular surface disease, glaucoma and contact lenses. After graduation she initially worked at a commercial practice, and for the next 4 or 5 years she consulted at an ophthalmology practice where she triaged and helped manage pre- and post-operative eye surgery patients . She prides herself in providing high quality patient-centred care and is passionate about making sure every patient understands their ocular condition and the process of treatment. When she’s not working, Rebekah spends her leisure time practicing classical ballet at her local dance studio and keeping company with her budgie, Chip.",
-      "imageURL": "https://aecwebresources.s3.ap-southeast-2.amazonaws.com/Bootcamp/optometrists/bek-hopps.jpg"
+      "bio": "Claire graduated as the top student of her year of the Masters in Optometry degree from Flinders University. She has exceptional and uncommon experience as an optometrist, which has driven her passion towards helping people with ocular surface disease, glaucoma and contact lenses. After graduation she initially worked at a commercial practice, and for the next 4 or 5 years she consulted at an ophthalmology practice where she triaged and helped manage pre- and post-operative eye surgery patients . She prides herself in providing high quality patient-centred care and is passionate about making sure every patient understands their ocular condition and the process of treatment. When she’s not working, Claire spends her leisure time practicing classical ballet at her local dance studio and keeping company with her budgie, Chip.",
+      "imageURL": "https://aecwebresources.s3.ap-southeast-2.amazonaws.com/Bootcamp/optometrists/claire-rendall.jpg"
     },
     {
       "title": "Mr",

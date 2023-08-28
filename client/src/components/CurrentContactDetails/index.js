@@ -153,7 +153,7 @@ function CurrentContactDetails() {
       return true
     }
 
-    const regex = /^(\+614\d{8}|04\d{8}|[0-9\+\-\(\)]{6,})$/
+    const regex = /^(\+614\d{8}|04\d{8}|[0-9\+\-\(\)]{8,})$/
 
     return regex.test(strippedNumber)
   }

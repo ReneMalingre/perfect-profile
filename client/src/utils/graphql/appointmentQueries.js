@@ -8,6 +8,7 @@ export const APPOINTMENT_FIELDS = gql`
     appointmentTime
     location
     locationAddress
+    locationTelephone
     optometristId
   }
 `
