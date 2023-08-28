@@ -20,8 +20,8 @@ function Header() {
   const { state, dispatch } = useAppState()
   const { fetchUserData, isUserDataLoaded, loading, error } = useUserData() // custom hook to retrieve user data from server
   const direction = useBreakpointValue({ base: 'column', md: 'row' })
-  const logoSize = useBreakpointValue({ base: '40px', md: '50px' })
-  const logoMargin = useBreakpointValue({ base: '1rem', md: '0px' })
+  const logoSize = useBreakpointValue({ base: '30px', md: '50px' })
+  const logoMargin = useBreakpointValue({ base: '0.5rem', md: '0px' })
   const isSmallScreen = useBreakpointValue({ base: true, md: false })
 
   const handlePageChange = (page) => {
@@ -84,7 +84,7 @@ function Header() {
     <Flex
       as="nav"
       px={2}
-      py={4}
+      py={2}
       mb={2}
       bg="headerFooterBg.500"
       color="headerFooterText.500"
@@ -98,14 +98,18 @@ function Header() {
         cursor="pointer"
       >
         <Logo width={logoSize} />
-        <Text fontSize="2xl" color="headerFooterText.500" ml={6}>
+        <Text
+          fontSize="2xl"
+          color="headerFooterText.500"
+          ml={isSmallScreen ? 2 : 6}
+        >
           {isSmallScreen
             ? 'Perfect Profile'
             : 'Perfect Profile - Adelaide Eye Care'}
         </Text>
       </Flex>
       {isSmallScreen ? (
-        <Text mt={2} fontSize="xl" color="headerFooterText.500">
+        <Text mt={1} fontSize="xl" color="headerFooterText.500">
           Adelaide Eye Care
         </Text>
       ) : (
@@ -113,7 +117,7 @@ function Header() {
       )}
       <Spacer mb={logoMargin} />
       {direction === 'column' ? (
-        <Divider mb={2} borderColor="headerFooterText.500" />
+        <Divider mb={1} borderColor="headerFooterText.500" />
       ) : (
         ''
       )}
@@ -151,13 +155,13 @@ function Header() {
             isSelected={state.currentPage === 'login'}
             onClick={() => handlePageChange('login')}
           />
-          <NavElement
+          {/* <NavElement
             id="signup"
             title="Register"
             link="/"
             isSelected={state.currentPage === 'signup'}
             onClick={() => handlePageChange('signup')}
-          />
+          /> */}
         </HStack>
       )}
     </Flex>

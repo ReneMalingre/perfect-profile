@@ -16,7 +16,6 @@ import Auth from '../utils/auth'
 import { useUserData } from '../components/customHooks/useUserData'
 import frontPageImage from '../assets/images/landing-page-image.jpg'
 
-//src =  'https://aecwebresources.s3.ap-southeast-2.amazonaws.com/Bootcamp/images/landing-page-image.jpg'
 const HomePage = () => {
   // Access state and dispatch from AppContext
   const { state, dispatch } = useAppState()
@@ -119,16 +118,16 @@ const HomePage = () => {
           <HStack spacing={4} mb={6}>
             <Button
               size="lg"
-              bgColor="panelLightText.400"
+              bgColor="contrastText.500"
               color="pageBg.500"
               fontWeight="normal"
               onClick={() => {
                 handleLoginClick()
               }}
             >
-              Login
+              Login to go to your Profile
             </Button>
-            <Button
+            {/* <Button
               size="lg"
               bgColor="panelLightText.800"
               color="pageBg.500"
@@ -138,7 +137,7 @@ const HomePage = () => {
               }}
             >
               Register with your pass code
-            </Button>
+            </Button> */}
           </HStack>
         )}
       </VStack>
