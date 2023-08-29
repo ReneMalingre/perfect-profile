@@ -21,7 +21,12 @@ function AppointmentCard() {
 
   let bookingLink = 'https://www.adelaideeyecare.com.au/book-appointment'
   return (
-    <Box borderWidth="1px" borderRadius="lg" p={4} boxShadow="md">
+    <Box
+      borderWidth="1px"
+      borderRadius="lg"
+      p={4}
+      boxShadow="inset 0 0 6px rgba(0, 0, 0, 0.25)"
+    >
       <Center>
         <Text fontSize="xl" fontWeight="bold" mb={2} color="contrastText.500">
           Your Appointment
@@ -38,7 +43,15 @@ function AppointmentCard() {
           </Text>
 
           <Text mb={2}>
-            <strong>Phone:</strong> {appointment.locationTelephone}
+            <strong>Phone:</strong>
+            <Link
+              href={`tel:${appointment.locationTelephone}`}
+              color="inherit"
+              _hover={{ textDecoration: 'none' }}
+            >
+              {' '}
+              {appointment.locationTelephone}
+            </Link>
           </Text>
           <Link
             href={googleMapsLink}

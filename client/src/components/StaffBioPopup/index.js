@@ -22,7 +22,7 @@ function StaffBioPopup({ imageURL, name, qualifications, bio }) {
       borderWidth="1px"
       borderRadius="lg"
       p={4}
-      boxShadow="md"
+      boxShadow="inset 0 0 6px rgba(0, 0, 0, 0.25)"
     >
       {/* Staff Image */}
       <Text fontSize="xl" fontWeight="bold" mb={2} color="contrastText.500">

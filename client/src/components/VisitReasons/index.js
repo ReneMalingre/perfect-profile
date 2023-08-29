@@ -307,6 +307,7 @@ function VisitReason({ appointmentId }) {
               p={2}
               m={1}
               borderRadius="md"
+              cursor="pointer"
             >
               {reason.reason}
             </ListItem>
