@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Input, Flex, Button, Text } from '@chakra-ui/react'
+import { Input, Flex, Button, Text, useBreakpointValue } from '@chakra-ui/react'
 import { getFullAddress, deepEqual } from '../../utils/utils'
 
 function AddressEntry({
@@ -109,9 +109,20 @@ function AddressEntry({
     setIsEditing(false)
   }
 
+  const isSmallScreen = useBreakpointValue({ base: true, md: false })
+
   return (
-    <Flex my={1}>
-      <Text as="strong" {...labelStyle} width={width}>
+    <Flex
+      my={1}
+      direction={isEditing ? (isSmallScreen ? 'column' : 'row') : 'row'}
+    >
+      <Text
+        as="strong"
+        {...labelStyle}
+        width={width}
+        onClick={isEditing ? null : handleTextClick}
+        cursor={isEditing ? 'default' : 'pointer'}
+      >
         {label}
       </Text>
       {isEditing ? (

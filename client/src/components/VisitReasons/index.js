@@ -46,6 +46,9 @@ function VisitReason({ appointmentId }) {
   const [selectValue, setSelectValue] = useState('default') // this is the value of the select element
   const [updateVisitReasons, { loading, error, data }] =
     useMutation(UPDATE_VISIT_REASONS)
+  const [modalTitle, setModalTitle] = useState(
+    'What is the reason for your visit?'
+  )
 
   const isValid = true
   const saveButtonStyle = {
@@ -79,9 +82,11 @@ function VisitReason({ appointmentId }) {
     const { value } = e.target
 
     if (value === 'custom') {
+      setModalTitle('What is the reason for your visit?')
       onOpen()
     } else if (value !== 'default') {
       const selectedText = e.target.options[e.target.selectedIndex].text
+      setModalTitle('Edit the reason for your visit')
       handleAdd(selectedText)
     }
 
@@ -292,6 +297,12 @@ function VisitReason({ appointmentId }) {
             <ListItem
               key={index}
               onClick={() => setSelectedReasonIndex(index)}
+              onDoubleClick={() => {
+                setSelectedReasonIndex(index)
+                setModalTitle('Edit the reason for your visit')
+                setCurrentText(reasons[index].reason)
+                onOpen()
+              }}
               bg={selectedReasonIndex === index ? 'green.100' : 'green.50'}
               p={2}
               m={1}
@@ -331,7 +342,7 @@ function VisitReason({ appointmentId }) {
             bgColor="panelLightText.500"
             color="headerFooterText.500"
           >
-            Add or Edit your reason for attending
+            {modalTitle}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody p={2}>

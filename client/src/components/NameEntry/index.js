@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Input, Flex, Button, Text } from '@chakra-ui/react'
+import { Input, Flex, Button, Text, useBreakpointValue } from '@chakra-ui/react'
 import { getFullName, deepEqual } from '../../utils/utils'
 
 function NameEntry({
@@ -53,6 +53,7 @@ function NameEntry({
     }
   }, [isEditing])
 
+  const isSmallScreen = useBreakpointValue({ base: true, md: false })
   const nameDetails = getFullName(localData)
 
   const saveButtonStyle = {
@@ -137,8 +138,17 @@ function NameEntry({
   }
 
   return (
-    <Flex my={1}>
-      <Text as="strong" {...labelStyle} width={width}>
+    <Flex
+      my={1}
+      direction={isEditing ? (isSmallScreen ? 'column' : 'row') : 'row'}
+    >
+      <Text
+        as="strong"
+        {...labelStyle}
+        width={width}
+        onClick={isEditing ? null : handleTextClick}
+        cursor={isEditing ? 'default' : 'pointer'}
+      >
         {label}
       </Text>
       {isEditing ? (
