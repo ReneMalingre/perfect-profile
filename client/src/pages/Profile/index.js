@@ -11,6 +11,7 @@ import VisualNeeds from '../../components/VisualNeeds'
 
 const Profile = () => {
   const { state, dispatch } = useAppState()
+
   const userData = state.userData
   const optometrist = state.optometrist
 
@@ -64,6 +65,7 @@ const Profile = () => {
               fontWeight="bold"
               mb={2}
               color="panelLightText.500"
+              minWidth="18ch"
             >
               Some Information
             </Text>

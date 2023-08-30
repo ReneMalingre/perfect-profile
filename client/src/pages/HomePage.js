@@ -14,8 +14,9 @@ import {
 } from '@chakra-ui/react'
 import Auth from '../utils/auth'
 import { useUserData } from '../components/customHooks/useUserData'
-import frontPageImage from '../assets/images/landing-page-image.jpg'
-
+// import frontPageImage from '../assets/images/landing-page-image.jpg'
+const frontPageImage =
+  'https://aecwebresources.s3.ap-southeast-2.amazonaws.com/Bootcamp/images/landing-page-image.jpg'
 const HomePage = () => {
   // Access state and dispatch from AppContext
   const { state, dispatch } = useAppState()
@@ -27,9 +28,9 @@ const HomePage = () => {
   const handleLoginClick = () => {
     dispatch({ type: SET_CURRENT_PAGE, payload: 'login' })
   }
-  const handleRegisterClick = () => {
-    dispatch({ type: SET_CURRENT_PAGE, payload: 'signup' })
-  }
+  // const handleRegisterClick = () => {
+  //   dispatch({ type: SET_CURRENT_PAGE, payload: 'signup' })
+  // }
   const handleGoToProfile = async () => {
     if (!isUserDataLoaded) {
       const success = await fetchUserData()
